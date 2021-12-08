@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIXI Slots</title>
+
+    <link rel="stylesheet" href="/common/css/common.css">
+</head>
+
+<body>
+    <div class="pixi-navigation">
+        <div class="pixi-navigation__button-wrap">
+            <button type="button" class="pixi-navigation__button">
+                <div class="pixi-navigation__bar-wrap">
+                    <div class="pixi-navigation__bar bar1"></div>
+                    <div class="pixi-navigation__bar bar2"></div>
+                    <div class="pixi-navigation__bar bar3"></div>
+                    <div class="pixi-navigation__bar bar4"></div>
+                </div>
+            </button>
+        </div>
+        <div class="pixi-navigation__content">
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Basic</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="container">
+                        <a href="/example/basic/container">Container</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="particle-container">
+                        <a href="/example/basic/particle-container">Particle Container</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="tinting">
+                        <a href="/example/basic/tinting">Tinting</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="simple-plane">
+                        <a href="/example/basic/simple-plane">Simple Plane</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Advanced</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="slots">
+                        <a href="/example/advanced/slots">Slots</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="scratchcard">
+                        <a href="/example/advanced/scratchcard">Scratch Card</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="mouse-trail">
+                        <a href="/example/advanced/mouse-trail">Mouse Trail</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="starwarp">
+                        <a href="/example/advanced/starwarp">Star Warp</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Documents</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="total-document">
+                        <a href="/example/document/total-document">Documents</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pixi-navigation__logo">HJ</div>
+    </div>
+    <section class="pixi pixi-slots">
+        <div class="pixi-controller">
+            <div class="pixi-controller__title">
+                PIXI Slots
+            </div>
+            <hr>
+            <div class="pixi-controller__container">
+                <div class="pixi-controller__canvas">
+                    <canvas id="slots" width="800" height="800"></canvas>
+                </div>
+            </div>
+            <div class="pixi-title">Example Code</div>
+            <pre class="pixi-controller__codeblock"><code>
+;(function() {
+    'use strict';
+
+    window.pixi = window.pixi || {};
+    window.pixi.component = window.pixi.component || {};
+
+    pixi.component.slots = (function() {
+        var obj = {};
+
+        var init = function() {
+            obj.section = document.querySelector('.pixi-slots');
+
+            if (!!obj.section) {
+                setElements();
+                setLoader();
+                setTicker();
+                bindEvents();
+            }
+        };
+
+        var setElements = function() {
+            obj.app = new PIXI.Application({
+                view: document.getElementById('slots'),
+                backgroundColor: 0x1099bb
+            });
+
+            obj.reelWidth = 160;
+            obj.symbolSize = 150;
+            obj.running = false;
+            obj.tweening = [];
+            obj.reels = [];
+        };
+
+        var bindEvents = function() {
+
+        };
+
+        var setLoader = function() {
+            obj.app.loader
+                .add('/content/images/dude1.png', '/content/images/dude1.png')
+                .add('/content/images/dude2.png', '/content/images/dude2.png')
+                .add('/content/images/dude3.png', '/content/images/dude3.png')
+                .add('/content/images/dude4.png', '/content/images/dude4.png')
+                .load(onAssetsLoaded);
+        };
+
+        var setTicker = function() {
+            obj.app.ticker.add(function() {
+                var now = Date.now();
+                var remove = [];
+                for (var i = 0; i < obj.tweening.length; i++) {
+                    var t = obj.tweening[i];
+                    var phase = Math.min(1, (now - t.start) / t.time);
+
+                    t.object[t.property] = lerp(t.propertyBeginValue, t.target, t.easing(phase));
+                    if (t.change) t.change(t);
+                    if (phase === 1) {
+                        t.object[t.property] = t.target;
+                        if (t.complete) t.complete(t);
+                        remove.push(t);
+                    }
+                }
+
+                for (var i = 0; i < remove.length; i++) {
+                    obj.tweening.splice(obj.tweening.indexOf(remove[i]), 1);
+                }
+            });
+        };
+
+        var startPlay = function() {
+            if (obj.running) return;
+            obj.running = true;
+
+            for (var i = 0; i < obj.reels.length; i++) {
+                var r = obj.reels[i];
+                var extra = Math.floor(Math.random() * 3);
+                var target = r.position + 10 + i * 5 + extra;
+                var time = 2500 + i * 600 + extra * 600;
+                tweenTo(r, 'position', target, time, backout(0.5), null, i === obj.reels.length - 1 ? reelsComplete : null);
+            }
+        };
+        
+        var reelsComplete = function() {
+            obj.running = false;
+        };
+
+        var onAssetsLoaded = function() {
+            var slotTextures = [
+                PIXI.Texture.from('/content/images/dude1.png'),
+                PIXI.Texture.from('/content/images/dude2.png'),
+                PIXI.Texture.from('/content/images/dude3.png'),
+                PIXI.Texture.from('/content/images/dude4.png'),
+            ];
+
+            var reelContainer = new PIXI.Container();
+            for (var i = 0; i < 5; i++) {
+                var rc = new PIXI.Container();
+                rc.x = i * obj.reelWidth;
+                reelContainer.addChild(rc);
+
+                var reel = {
+                    container: rc,
+                    symbols: [],
+                    position: 0,
+                    previousPosition: 0,
+                    blur: new PIXI.filters.BlurFilter
+                };
+
+                reel.blur.blurX = 0;
+                reel.blur.blurY = 0;
+                rc.filters = [reel.blur];
+
+                for (var j = 0; j < 4; j++) {
+                    var symbol = new PIXI.Sprite(slotTextures[Math.floor(Math.random() * slotTextures.length)]);
+                    symbol.y = j * obj.symbolSize;
+                    symbol.scale.x = symbol.scale.y = Math.min((obj.symbolSize / symbol.width), obj.symbolSize / symbol.height);
+                    symbol.x = Math.round((obj.symbolSize - symbol.width) / 2);
+                    reel.symbols.push(symbol);
+                    rc.addChild(symbol);
+                }
+                obj.reels.push(reel);
+            }
+            obj.app.stage.addChild(reelContainer);
+
+            var margin = (obj.app.screen.height - (obj.symbolSize * 3)) / 2;
+            reelContainer.y = margin;
+            reelContainer.x = Math.round(obj.app.screen.width - (obj.reelWidth * 5));
+            var top = new PIXI.Graphics();
+            top.beginFill(0, 1);
+            top.drawRect(0, 0, obj.app.screen.width, margin);
+            var bottom = new PIXI.Graphics();
+            bottom.beginFill(0, 1);
+            bottom.drawRect(0, (obj.symbolSize * 3) + margin, obj.app.screen.width, margin);
+
+            var style = new PIXI.TextStyle({
+                fontFamily: 'Arial',
+                fontSize: 36,
+                fontStyle: 'italic',
+                fontWeight: 'bold',
+                fill: ['#76e776', '#eceda2'],
+                stroke: '#4a1850',
+                strokeThickness: 5,
+                dropShadow: true,
+                dropShadowColor: '#000000',
+                dropShadowBlur: 4,
+                dropShadowAngle: Math.PI / 6,
+                dropShadowDistance: 6,
+                wordWrap: true,
+                wordWrapWidth: 440,
+            });
+
+            var playText = new PIXI.Text('Spin the wheels!', style);
+            playText.x = Math.round((bottom.width - playText.width) / 2);
+            playText.y = obj.app.screen.height - margin + Math.round((margin - playText.height) / 2);
+            bottom.addChild(playText);
+
+            var headerText = new PIXI.Text('PIXI CRAYON SLOTS!', style);
+            headerText.x = Math.round((top.width - headerText.width) / 2);
+            headerText.y = Math.round((margin - headerText.height) / 2);
+            top.addChild(headerText);
+        
+            obj.app.stage.addChild(top);
+            obj.app.stage.addChild(bottom);
+        
+            bottom.interactive = true;
+            bottom.buttonMode = true;
+            bottom.addListener('pointerdown', () => {
+                startPlay();
+            });
+
+            obj.app.ticker.add((delta) => {
+                for (var i = 0; i < obj.reels.length; i++) {
+                    var r = obj.reels[i];
+                    r.blur.blurY = (r.position - r.previousPosition) * 8;
+                    r.previousPosition = r.position;
+
+                    for (var j = 0; j < r.symbols.length; j++) {
+                        var s = r.symbols[j];
+                        var prevy = s.y;
+                        s.y = ((r.position + j) % r.symbols.length) * obj.symbolSize - obj.symbolSize;
+                        if (s.y < 0 && prevy > obj.symbolSize) {
+                            s.texture = slotTextures[Math.floor(Math.random() * slotTextures.length)];
+                            s.scale.x = s.scale.y = Math.min(obj.symbolSize / s.texture.width, obj.symbolSize / s.texture.height);
+                            s.x = Math.round((obj.symbolSize - s.width) / 2);
+                        }
+                    }
+                }
+            });
+        };
+
+        var tweenTo = function(object, property, target, time, easing, onchange, oncomplete) {
+            var tween = {
+                object,
+                property,
+                propertyBeginValue: object[property],
+                target,
+                easing,
+                time,
+                change: onchange,
+                complete: oncomplete,
+                start: Date.now(),
+            };
+
+            obj.tweening.push(tween);
+            return tween;
+        };
+
+        var lerp = function(a1, a2, t) {
+            return a1 * (1 - t) + a2 * t;
+        };
+
+        var backout = function(amount) {
+            return (t) => (--t * t * ((amount + 1) * t + amount) + 1);
+        };
+
+        return {
+            init: init
+        }
+    })();
+
+    pixi.component.slots.init();
+})();
+              </code></pre>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-display-object">
+            <div class="pixi-accordion">
+                <a id="pixi-display-object" href="/example/basic/container#pixi-display-object"
+                    class="pixi-accordion__title has-content">
+                    PIXI.DisplayObject
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-application">
+            <div class="pixi-accordion">
+                <a id="pixi-application" href="/example/basic/container#pixi-application"
+                    class="pixi-accordion__title">
+                    PIXI.Application
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-container">
+            <div class="pixi-accordion">
+                <a id="pixi-container" href="/example/basic/container#pixi-container"
+                    class="pixi-accordion__title">
+                    PIXI.Container
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-texture">
+            <div class="pixi-accordion">
+                <a id="pixi-texture" href="/example/basic/container#pixi-texture" class="pixi-accordion__title">
+                    PIXI.Texture
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-spite">
+            <div class="pixi-accordion">
+                <a id="pixi-sprite" href="/example/basic/container#pixi-sprite" class="pixi-accordion__title">
+                    PIXI.Sprite
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-ticker">
+            <div class="pixi-accordion">
+                <a id="pixi-ticker" href="/example/basic/container#pixi-ticker" class="pixi-accordion__title">
+                    PIXI.Ticker
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-graphics">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-graphics">🔗</a>
+                <a id="pixi-graphics" class="pixi-accordion__title has-content">
+                    PIXI.Graphics
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Graphics.html">https://pixijs.download/release/docs/PIXI.Graphics.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Graphics 클래스는 주로 선, 원 및 직사각형과 같은 기본 모양을 디스플레이에 렌더링하고 색상을 지정하고 채우는 데
+                        사용된다.</div>
+                    <div class="pixi-desc--sentence">그러나 Graphics 개체를 사용하여 마스크 또는 복잡한 hitArea로 사용할 기본 요소 목록을 작성할 수도 있다.
+                    </div>
+                    <br>
+                    <div class="pixi-desc--sentence">Regacy 명명 규칙으로 인해 이 클래스의 일부 함수 동작이 혼동될 수 있다.</div>
+                    <div class="pixi-desc--sentence">drawRect(), drawPolygon() 등에 대한 각 호출은 실제로 나중에 렌더링 또는 적중 테스트에 사용하기
+                        위해 Geometry 클래스의 GraphicsGeometry 객체에 해당 Primitive를 저장한다.</div>
+                    <div class="pixi-desc--sentence">마찬가지로 clear() 함수는 화면을 변경하지 않고 단순히 기본 요소 목록을 재설정하므로 기존 Graphics 객체의
+                        내용을 다시 작성하려는 경우에 유용할 수 있다.</div>
+                    <br>
+                    <div class="pixi-desc--sentence">GraphicsGeometry 목록이 작성되면 이를 새 Geometry 개체의 생성자에 전달하여 최적화로 다른
+                        Geometry 개체에서 재사용할 수 있다.</div>
+                    <div class="pixi-desc--sentence">이 기능 때문에 각 GraphicsGeometry를 적절하게 역참조하고 메모리 누수를 방지하기 위해 Geometry
+                        개체에 대해 destroy()를 호출하는 것이 중요하다.</div>
+                    <pre class="pixi-codeblock"><code>
+var top = new PIXI.Graphics();
+top.beginFill(0, 1);
+top.drawRect(0, 0, obj.app.screen.width, margin);
+var bottom = new PIXI.Graphics();
+bottom.beginFill(0, 1);
+bottom.drawRect(0, (obj.symbolSize * 3) + margin, obj.app.screen.width, margin);
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.Graphics (geometry)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>geometry</td>
+                            <td>
+                                <span class="pixi-link">
+                                    <a href="#pixi-container">PIXI.Container</a>
+                                </span>
+                            </td>
+                            <td>null</td>
+                            <td>사용할 geometry를 생략하면 새 GraphicsGeometry 인스턴스가 생성된다.</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Members</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">blendMode : number</strong>
+                                <p class="pixi-list__text">그래픽 모양에 적용할 혼합 모드. 블렌드 모드를 재설정하려면 PIXI.BLEND_MODES.NORMAL 값을
+                                    적용해야한다.</p>
+                                <p class="pixi-list__text">GraphicsGeometry 목록의 각 프리미티브는 순차적으로 렌더링되므로
+                                    PIXI.BLEND_MODES.ADD 및 PIXI.BLEND_MODES.MULTIPLY와 같은 모드가 프리미티브별로 적용된다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">cacheAsBitmap : boolean</strong>
+                                <p class="pixi-list__text">cacheAsBitmap이 true로 설정되면 그래픽 객체는 마치 스프라이트인 것처럼 렌더링된다.</p>
+                                <p class="pixi-list__text">이것은 그래픽 요소가 자주 변경되지 않는 경우에 유용한데, 텍스처 메모리를 차지하는 대신 개체의 렌더링 속도를
+                                    높일 수 있기 때문이다.</p>
+                                <p class="pixi-list__text">또한 그래픽 개체가 Canvas를 사용하여 렌더링되기 때문에 앤티앨리어싱이 필요한 경우에도 유용하다.</p>
+                                <p class="pixi-list__text">그래픽 요소를 지속적으로 다시 그리는 경우에는 권장하지 않는다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">currentPath : PIXI.Polygon</strong>
+                                <p class="pixi-list__text">현재 경로</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">fill : PIXI.FillStyle</strong>
+                                <p class="pixi-list__text">현재 채우기 스타일</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">geometry :
+                                    <span class="pixi-link">
+                                        <a href="#pixi-graphics-geometry">PIXI.GraphicsGeometry</a>
+                                    </span>
+                                </strong>
+                                <p class="pixi-list__text">정점 위치, 면 인덱스, 법선, 색상, UV 및 버퍼 내의 사용자 정의 속성을 포함하여 이 모든 데이터를
+                                    GPU에 전달하는 비용을 줄인다.</p>
+                                <p class="pixi-list__text">여러 Mesh 또는 Graphics 개체 간에 공유할 수 있다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">line : PIXI.LineStyle</strong>
+                                <p class="pixi-list__text">현재 선 스타일</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">pluginName : string</strong>
+                                <p class="pixi-list__text">일괄 처리를 위한 렌더링 플러그인</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">shader : PIXI.Shader</strong>
+                                <p class="pixi-list__text">Geometry를 처리하고 GPU에서 실행되는 꼭짓점 및 조각 Shader를 나타낸다. 여러 Graphics
+                                    개체 간에 공유할 수 있다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">tint : number</strong>
+                                <p class="pixi-list__text">각 Graphic 모양에 적용되는 틴트. 16진수 값을 사용하며 값을 0xFFFF로 설정하면 틴트의 영향이
+                                    없어진다.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">arc (cx, cy, radius, startAngle, endAngle,
+                                    anticlockwise)</strong>
+                                <p class="pixi-list__text">호/곡선을 생성한다. (원 또는 원의 일부를 생성하는 데 사용)</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>cx</td>
+                                <td>number</td>
+                                <td></td>
+                                <td>원 중심의 x 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>cy</td>
+                                <td>number</td>
+                                <td></td>
+                                <td>원 중심의 y 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>radius</td>
+                                <td>number</td>
+                                <td></td>
+                                <td>원의 반경</td>
+                            </tr>
+                            <tr>
+                                <td>startAngle</td>
+                                <td>number</td>
+                                <td></td>
+                                <td>시작 각도 (0은 호 원의 3시 위치에 있음)</td>
+                            </tr>
+                            <tr>
+                                <td>endAngle</td>
+                                <td>number</td>
+                                <td></td>
+                                <td>종료 각도</td>
+                            </tr>
+                            <tr>
+                                <td>anticlockwise</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>도면이 시계 반대 방향인지 시계 방향인지 여부를 지정한다. False는 기본값이며 시계 방향을 나타내고 true는 시계 반대 방향을 나타낸다.</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">arcTo (x1, y1, x2, y2, radius)</strong>
+                                <p class="pixi-list__text">Canvas의 두 접선 사이에 호/곡선을 만든다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x1</td>
+                                <td>number</td>
+                                <td>호의 첫 번째 접선점의 x 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>y1</td>
+                                <td>number</td>
+                                <td>호의 첫 번째 접선점의 y 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>x2</td>
+                                <td>number</td>
+                                <td>호 끝의 x 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>y2</td>
+                                <td>number</td>
+                                <td>호 끝의 y 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>radius</td>
+                                <td>number</td>
+                                <td>호의 반경</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">beginFill (color, alpha)</strong>
+                                <p class="pixi-list__text">다른 Graphics 메서드(예: lineTo() 또는 drawCircle())에 대한 후속 호출이 그릴 때
+                                    사용하는 간단한 단색 채우기를 지정한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>color</td>
+                                <td>number</td>
+                                <td>0</td>
+                                <td>채우기의 색</td>
+                            </tr>
+                            <tr>
+                                <td>alpha</td>
+                                <td>number</td>
+                                <td>1</td>
+                                <td>채우기의 알파값</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">clear ()</strong>
+                                <p class="pixi-list__text">이 Graphics 개체에 그려진 그래픽을 지우고 채우기 및 선 스타일 설정을 재설정한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">clone ()</strong>
+                                <p class="pixi-list__text">이 값과 동일한 값으로 새 Graphics 개체를 만든다. 객체의 Geometry만 복제되고 변환(위치, 배율
+                                    등)이 복제되지 않는다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">closePath ()</strong>
+                                <p class="pixi-list__text">그리고있던 현재 경로를 닫는다. (새로운 경로를 그릴 경우)</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">destroy (options)</strong>
+                                <p class="pixi-list__text">Graphics 개체를 파괴한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>options</td>
+                                <td>object | boolean</td>
+                                <td></td>
+                                <td>옵션 매개변수. true 일 경우 모든 옵션이 해당 값으로 설정된 것처럼 작동</td>
+                            </tr>
+                            <tr>
+                                <td>options.children</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>true일 경우 모든 자식의 destroy 메소드를 호출</td>
+                            </tr>
+                            <tr>
+                                <td>options.texture</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>Sprite의 Texture도 파괴</td>
+                            </tr>
+                            <tr>
+                                <td>options.baseTexture</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>Sprite의 기본 Texture도 파괴</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">drawCircle (x, y, radius)</strong>
+                                <p class="pixi-list__text">원을 그린다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x</td>
+                                <td>number</td>
+                                <td>원 중심의 X 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>y</td>
+                                <td>number</td>
+                                <td>원 중심의 Y 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>radius</td>
+                                <td>number</td>
+                                <td>원의 반경</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">drawEllipse (x, y, width, height)</strong>
+                                <p class="pixi-list__text">타원을 그린다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x</td>
+                                <td>number</td>
+                                <td>타원 중심의 X 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>y</td>
+                                <td>number</td>
+                                <td>타원 중심의 Y 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>width</td>
+                                <td>number</td>
+                                <td>타원의 절반 너비</td>
+                            </tr>
+                            <tr>
+                                <td>height</td>
+                                <td>number</td>
+                                <td>타원의 절반 높이</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">drawPolygon (…path)</strong>
+                                <p class="pixi-list__text">주어진 경로를 사용하여 다각형을 그린다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>path</td>
+                                <td>Array<number> | Array<PIXI.Point> | PIXI.Polygon</td>
+                                <td>Polygon을 구성하는 데 사용되는 경로 데이터</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">drawRect (x, y, width, height)</strong>
+                                <p class="pixi-list__text">직사각형 모양을 그린다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x</td>
+                                <td>number</td>
+                                <td>직사각형의 왼쪽 상단의 X 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>y</td>
+                                <td>number</td>
+                                <td>직사각형의 왼쪽 상단의 Y 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>width</td>
+                                <td>number</td>
+                                <td>직사각형의 너비</td>
+                            </tr>
+                            <tr>
+                                <td>height</td>
+                                <td>number</td>
+                                <td>직사각형의 높이</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-graphics-geometry">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-graphics-geometry">🔗</a>
+                <a id="pixi-graphics-geometry" class="pixi-accordion__title has-content">
+                    PIXI.GraphicsGeometry
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.GraphicsGeometry.html">https://pixijs.download/release/docs/PIXI.GraphicsGeometry.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Graphics 클래스에는 선, 원 및 직사각형과 같은 기본 모양을 디스플레이에 그리고 색상을 지정하고 채우는 데
+                        사용되는 메서드가 포함되어 있다.</div>
+                    <div class="pixi-desc--sentence">GraphicsGeometry는 이어컷을 사용하여 다시 테셀레이션하는 데 비용이 많이 들기 때문에 형상을 지속적으로
+                        업데이트하지 않도록 설계되어있다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">clear ()</strong>
+                                <p class="pixi-list__text">이 Graphics 개체에 그려진 그래픽을 지우고 채우기 및 선 스타일 설정을 재설정한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">destroy ()</strong>
+                                <p class="pixi-list__text">GraphicsGeometry 개체를 파괴한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">containsPoint (point)</strong>
+                                <p class="pixi-list__text">Point가 이 Geometry 내에 포함되어 있는지 여부를 확인한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>point</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a href="/example/advanced/mouse-trail#pixi-ipoint">IPointData</a>
+                                    </span>
+                                </td>
+                                <td>포함되어 있는지 확인할 Point.</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </section>
+    <script src="/common/js/pixi.js"></script>
+    <script src="/common/js/pixi-spine.js"></script>
+    <script src="/common/js/common.js"></script>
+    <script src="./component.js"></script>
+</body>
+
+</html>

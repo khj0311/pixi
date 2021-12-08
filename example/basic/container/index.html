@@ -11,6 +11,63 @@
 </head>
 
 <body>
+    <div class="pixi-navigation">
+        <div class="pixi-navigation__button-wrap">
+            <button type="button" class="pixi-navigation__button">
+                <div class="pixi-navigation__bar-wrap">
+                    <div class="pixi-navigation__bar bar1"></div>
+                    <div class="pixi-navigation__bar bar2"></div>
+                    <div class="pixi-navigation__bar bar3"></div>
+                    <div class="pixi-navigation__bar bar4"></div>
+                </div>
+            </button>
+        </div>
+        <div class="pixi-navigation__content">
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Basic</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="container">
+                        <a href="/example/basic/container">Container</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="particle-container">
+                        <a href="/example/basic/particle-container">Particle Container</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="tinting">
+                        <a href="/example/basic/tinting">Tinting</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="simple-plane">
+                        <a href="/example/basic/simple-plane">Simple Plane</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Advanced</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="slots">
+                        <a href="/example/advanced/slots">Slots</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="scratchcard">
+                        <a href="/example/advanced/scratchcard">Scratch Card</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="mouse-trail">
+                        <a href="/example/advanced/mouse-trail">Mouse Trail</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="starwarp">
+                        <a href="/example/advanced/starwarp">Star Warp</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Documents</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="total-document">
+                        <a href="/example/document/total-document">Documents</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pixi-navigation__logo">HJ</div>
+    </div>
     <section class="pixi pixi-container">
         <div class="pixi-controller">
             <div class="pixi-controller__title">
@@ -638,7 +695,7 @@ var app = new PIXI.Application({
                             <td>anchor</td>
                             <td>
                                 <span class="pixi-link">
-                                    <a href="/components/preview/mouse-trail#pixi-ipoint">PIXI.IPointData</a>
+                                    <a href="/example/advanced/mouse-trail#pixi-ipoint">PIXI.IPointData</a>
                                 </span>
                             </td>
                             <td>Sprite 배치/회전에 사용되는 기본 앵커 포인트</td>
@@ -804,7 +861,7 @@ var app = new PIXI.Application({
                                 <td>point</td>
                                 <td>
                                     <span class="pixi-link">
-                                        <a href="/components/preview/mouse-trail#pixi-ipoint">IPointData</a>
+                                        <a href="/example/advanced/mouse-trail#pixi-ipoint">IPointData</a>
                                     </span>
                                 </td>
                                 <td>테스트 포인트 (x, y)</td>
@@ -989,7 +1046,7 @@ var app = new PIXI.Application({
     <script src="/common/js/pixi.js"></script>
     <script src="/common/js/pixi-spine.js"></script>
     <script src="/common/js/common.js"></script>
-    <script src="./container.js"></script>
+    <script src="./component.js"></script>
 </body>
 
 </html>

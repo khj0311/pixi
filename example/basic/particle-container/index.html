@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIXI Particle Container</title>
+
+    <link rel="stylesheet" href="/common/css/common.css">
+</head>
+
+<body>
+    <div class="pixi-navigation">
+        <div class="pixi-navigation__button-wrap">
+            <button type="button" class="pixi-navigation__button">
+                <div class="pixi-navigation__bar-wrap">
+                    <div class="pixi-navigation__bar bar1"></div>
+                    <div class="pixi-navigation__bar bar2"></div>
+                    <div class="pixi-navigation__bar bar3"></div>
+                    <div class="pixi-navigation__bar bar4"></div>
+                </div>
+            </button>
+        </div>
+        <div class="pixi-navigation__content">
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Basic</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="container">
+                        <a href="/example/basic/container">Container</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="particle-container">
+                        <a href="/example/basic/particle-container">Particle Container</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="tinting">
+                        <a href="/example/basic/tinting">Tinting</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="simple-plane">
+                        <a href="/example/basic/simple-plane">Simple Plane</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Advanced</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="slots">
+                        <a href="/example/advanced/slots">Slots</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="scratchcard">
+                        <a href="/example/advanced/scratchcard">Scratch Card</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="mouse-trail">
+                        <a href="/example/advanced/mouse-trail">Mouse Trail</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="starwarp">
+                        <a href="/example/advanced/starwarp">Star Warp</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Documents</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="total-document">
+                        <a href="/example/document/total-document">Documents</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pixi-navigation__logo">HJ</div>
+    </div>
+    <section class="pixi pixi-particle-container">
+        <div class="pixi-controller">
+            <div class="pixi-controller__title">
+                PIXI Particle Container Controller
+            </div>
+            <hr>
+            <div class="pixi-controller__container">
+                <div class="pixi-controller__control">
+                    <div class="pixi-controller__control-wrap">
+                        <div class="pixi-subtitle">PIXI.Sprite</div>
+                        <div class="pixi-controller__control-form">
+                            <div>
+                                <button class="pixi-controller__control-button" id="addSprite" type="button">Add
+                                    Sprite</button>
+                                <button class="pixi-controller__control-button" id="removeSprite" type="button">Remove
+                                    Sprite</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pixi-controller__canvas">
+                    <canvas id="particleContainer" width="800" height="800"></canvas>
+                </div>
+            </div>
+            <div class="pixi-title">Example Code</div>
+            <pre class="pixi-controller__codeblock"><code>
+;(function() {
+    'use strict';
+
+    window.pixi = window.pixi || {};
+    window.pixi.component = window.pixi.component || {};
+
+    pixi.component.particleContainer = (function() {
+        var obj = {};
+
+        var init = function() {
+            obj.section = document.querySelector('.pixi-particle-container');
+
+            if (!!obj.section) {
+                setElements();
+                setMaggots();
+                setTicker();
+                bindEvents();
+            }
+        };
+
+        var setElements = function() {
+            obj.particleApp = new PIXI.Application({
+                view: document.getElementById('particleContainer'),
+                width: 800,
+                height: 800
+            });
+
+            obj.sprites = new PIXI.ParticleContainer(100, {
+                scale: true,
+                position: true,
+                rotation: true,
+                uvs: true,
+                alpha: true
+            });
+
+            obj.particleApp.stage.addChild(obj.sprites);
+
+            obj.maggots = [];
+            obj.maggotBoundsPadding = 100;
+            obj.maggotBounds = new PIXI.Rectangle(
+                -obj.maggotBoundsPadding,
+                -obj.maggotBoundsPadding,
+                obj.particleApp.screen.width + obj.maggotBoundsPadding * 2,
+                obj.particleApp.screen.height + obj.maggotBoundsPadding * 2,
+            );
+
+            obj.tick = 0;
+
+            // Sprite
+            obj.addSprite = obj.section.querySelector('#addSprite');
+            obj.removeSprite = obj.section.querySelector('#removeSprite');
+            obj.removeSomeSprite = obj.section.querySelector('#removeSomeSprite');
+        };
+
+        var setMaggots = function() {
+            for (var i = 0; i < 10; i++) {
+                createSprite();
+            }
+        };
+
+        var setTicker = function() {
+            obj.particleApp.ticker.add(tickerAnimation);
+        };
+
+        var tickerAnimation = function() {
+            for (var i = 0; i < obj.maggots.length; i++) {
+                var maggot = obj.maggots[i];
+                maggot.scale.y = 0.95 + Math.sin(obj.tick + maggot.offset) * 0.05;
+                maggot.direction += maggot.turningSpeed * 0.01;
+                maggot.x += Math.sin(maggot.direction) * (maggot.speed * maggot.scale.y);
+                maggot.y += Math.cos(maggot.direction) * (maggot.speed * maggot.scale.y);
+                maggot.rotation = -maggot.direction + Math.PI;
+
+                if (maggot.x < obj.maggotBounds.x) {
+                    maggot.x += obj.maggotBounds.width;
+                } else if (maggot.x > obj.maggotBounds.x + obj.maggotBounds.width) {
+                    maggot.x -= obj.maggotBounds.width;
+                }
+
+                if (maggot.y < obj.maggotBounds.y) {
+                    maggot.y += obj.maggotBounds.height;
+                } else if (maggot.y > obj.maggotBounds.y + obj.maggotBounds.height) {
+                    maggot.y -= obj.maggotBounds.height;
+                }
+            }
+
+            obj.tick += 0.1;
+        };
+
+        var bindEvents = function() {
+            if (obj.addSprite) obj.addSprite.addEventListener('click', onClickAddSprite);
+            if (obj.removeSprite) obj.removeSprite.addEventListener('click', onClickRemoveSprite);
+        };
+
+        var createSprite = function() {
+            var maggot = PIXI.Sprite.from('/content/images/maggot_tiny.png');
+            maggot.anchor.set(0.5);
+            maggot.scale.set(0.8 + Math.random() * 0.3);
+            maggot.x = Math.random() * obj.particleApp.screen.width;
+            maggot.y = Math.random() * obj.particleApp.screen.height;
+            maggot.tint = Math.random() * 0x808080;
+            maggot.direction = Math.random() * Math.PI * 2;
+            maggot.turningSpeed = Math.random() - 0.8;
+            maggot.speed = (2 + Math.random() * 2) * 0.2;
+            maggot.offset = Math.random() * 100;
+            obj.maggots.push(maggot);
+            obj.sprites.addChild(maggot);
+        };
+
+        var onClickAddSprite = function() {
+            createSprite();
+        };
+
+        var onClickRemoveSprite = function() {
+            var child = obj.sprites.children;
+            var leng = obj.sprites.children.length - 1;
+            obj.maggots.pop();
+            obj.sprites.removeChild(child[leng]);
+        };
+
+        return {
+            init: init
+        }
+    })();
+
+    pixi.component.particleContainer.init();
+})();
+              </code></pre>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-display-object">
+            <div class="pixi-accordion">
+                <a id="pixi-display-object" href="/example/basic/container#pixi-display-object"
+                    class="pixi-accordion__title has-content">
+                    PIXI.DisplayObject
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-application">
+            <div class="pixi-accordion">
+                <a id="pixi-application" href="/example/basic/container#pixi-application"
+                    class="pixi-accordion__title">
+                    PIXI.Application
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-particle-container">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-particle-container">🔗</a>
+                <a id="pixi-particle-container" class="pixi-accordion__title has-content">
+                    PIXI.ParticleContainer
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.ParticleContainer.html">https://pixijs.download/release/docs/PIXI.ParticleContainer.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">ParticleContainer 클래스는 오로지 속도만을 위해 만들어진 PIXI.Container의 정말 빠른 버전이므로
+                        많은 Sprite나 Particle이 필요할 때 사용한다.</div>
+                    <div class="pixi-desc--sentence">ParticleContainer의 단점은 대부분의 고급 기능이 작동하지 않는다는 것이다.
+                        ParticleContainer는 기본 개체 변환(위치, 크기, 회전) 및 색조와 같은 일부 고급 기능(v4.5.6 기준)을 구현한다.</div>
+                    <div class="pixi-desc--sentence">Masking, Children, Filters 등과 같은 기타 고급 기능은 이 batch의 Sprite에서는 작동하지
+                        않는다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Example</div>
+                    <pre class="pixi-codeblock"><code>
+var container = new ParticleContainer();
+
+for (var i = 0; i < 100; ++i) {
+    var sprite = PIXI.Sprite.from("myImage.png");
+    container.addChild(sprite);
+}
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.ParticleContainer (maxSize, properties, batchSize,
+                            autoResize)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>maxSize</td>
+                            <td>number</td>
+                            <td>1500</td>
+                            <td>Container에서 Rendering할 수 있는 최대 Particle 수. 할당된 버퍼의 크기에 영향을 준다.</td>
+                        </tr>
+                        <tr>
+                            <td>properties</td>
+                            <td>object</td>
+                            <td></td>
+                            <td>GPU에 업로드하여 적용해야하는 자식의 속성</td>
+                        </tr>
+                        <tr>
+                            <td>properties.vertices</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>true일 경우 정점이 업로드되고 적용된다. Sprite의 scale / anchor / trim / frame / orig가 동적이면 true로 설정한다.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>properties.position</td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>true일 경우 position이 업로드되어 적용된다.</td>
+                        </tr>
+                        <tr>
+                            <td>properties.rotation</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>true일 경우 rotation이 업로드되어 적용된다.</td>
+                        </tr>
+                        <tr>
+                            <td>properties.uvs</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>true일 경우 uv가 업로드되어 적용된다.</td>
+                        </tr>
+                        <tr>
+                            <td>properties.tint</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>true일 경우 alpha와 tint가 업로드되어 적용된다.</td>
+                        </tr>
+                        <tr>
+                            <td>batchSize</td>
+                            <td>number</td>
+                            <td>16384</td>
+                            <td>배치당 Particle 수. maxSize보다 작으면 maxSize가 대신 사용된다.</td>
+                        </tr>
+                        <tr>
+                            <td>autoResize</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>true일 경우 max Size보다 더 많은 Particle이 존재할 경우에 대비하여 Container에 더 많은 batch가 할당된다.</td>
+                        </tr>
+                    </table>
+                    <pre class="pixi-codeblock"><code>
+var app = new PIXI.Application({
+    view: document.getElementById('particleContainer'),
+    width: 800,
+    height: 800
+});
+
+var sprites = new PIXI.ParticleContainer(100, {
+    scale: true,
+    position: true,
+    rotation: true,
+    uvs: true,
+    alpha: true
+});
+
+app.stage.addChild(sprites);
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">destroy (options)</strong>
+                                <p class="pixi-list__text">컨테이너를 파괴한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>options</td>
+                                <td>object | boolean</td>
+                                <td></td>
+                                <td>옵션 매개변수. true일 경우 모든 옵션이 해당 값으로 설정된 것처럼 작동한다.</td>
+                            </tr>
+                            <tr>
+                                <td>options.children</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>true일 경우 모든 자식의 destroy 메소드도 호출된다.</td>
+                            </tr>
+                            <tr>
+                                <td>options.texture</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>options.children이 true일 경우 자식 Sprite에만 사용된다. 자식 Sprite의 Texture가 파괴된다.</td>
+                            </tr>
+                            <tr>
+                                <td>options.baseTexture</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>options.children이 true일 경우 자식 Sprite에만 사용된다. 자식 Sprite의 기본 Texture가 파괴된다.</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">setProperties (properties)</strong>
+                                <p class="pixi-list__text">전달된 속성 개체를 기반으로 private 속성 배열을 동적/정적으로 설정한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>properties</td>
+                                <td>object</td>
+                                <td></td>
+                                <td>업로드할 속성</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-spite">
+            <div class="pixi-accordion">
+                <a id="pixi-sprite" href="/example/basic/container#pixi-sprite" class="pixi-accordion__title">
+                    PIXI.Sprite
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-ticker">
+            <div class="pixi-accordion">
+                <a id="pixi-ticker" href="/example/basic/container#pixi-ticker" class="pixi-accordion__title">
+                    PIXI.Ticker
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-rectangle">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-rectangle">🔗</a>
+                <a id="pixi-rectangle" class="pixi-accordion__title has-content">
+                    PIXI.Rectangle
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Rectangle.html">https://pixijs.download/release/docs/PIXI.Rectangle.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Rectangle 개체는 왼쪽 위 모서리 지점(x, y)과 너비 및 높이로 표시되는 위치로 정의되는 영역이다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.Rectangle (x, y, width, height)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>x</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>직사각형의 왼쪽 위 모서리의 X 좌표</td>
+                        </tr>
+                        <tr>
+                            <td>y</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>직사각형의 왼쪽 위 모서리의 Y 좌표</td>
+                        </tr>
+                        <tr>
+                            <td>width</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>직사각형의 전체 너비</td>
+                        </tr>
+                        <tr>
+                            <td>height</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>직사각형의 전체 높이</td>
+                        </tr>
+                    </table>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">destroy (options)</strong>
+                                <p class="pixi-list__text">모서리가 그리드에 놓이도록 직사각형을 확대한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>resolution</td>
+                                <td>number</td>
+                                <td>1</td>
+                                <td>해상도</td>
+                            </tr>
+                            <tr>
+                                <td>eps</td>
+                                <td>number</td>
+                                <td>0.001</td>
+                                <td>정밀도</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">clone ()</strong>
+                                <p class="pixi-list__text">이 직사각형의 복제본을 만든다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">contains (x, y)</strong>
+                                <p class="pixi-list__text">주어진 x 및 y 좌표가 이 직사각형 내에 포함되어 있는지 확인한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x</td>
+                                <td>number</td>
+                                <td>테스트할 점의 X 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>y</td>
+                                <td>number</td>
+                                <td>테스트할 점의 Y 좌표</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">containsRect (other)</strong>
+                                <p class="pixi-list__text">이 직사각형 개체 내에 다른 직사각형이 포함되어 있는지 여부를 결정한다.</p>
+                                <p class="pixi-list__text">동일한 공간을 차지하는 직사각형은 서로를 포함하는 것으로 간주한다.</p>
+                                <p class="pixi-list__text">영역이 없는 직사각형(너비 또는 높이가 0임)은 다른 영역이 없는 직사각형도 포함하여 아무 것도 포함할 수
+                                    없다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">equals (other)</strong>
+                                <p class="pixi-list__text">다른 직사각형을 허용하고 주어진 직사각형이 이 직사각형과 같으면 true를 반환한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x</td>
+                                <td>Rectangle</td>
+                                <td>포함되어 있는지 확인 할 Rectangle 객체</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">copyFrom (rectangle)</strong>
+                                <p class="pixi-list__text">이 직사각형에 다른 직사각형을 복사한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">copyTo (rectangle)</strong>
+                                <p class="pixi-list__text">이 직사각형을 다른 직사각형에 복사한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">fit (rectangle)</strong>
+                                <p class="pixi-list__text">전달된 직사각형 주위에 이 직사각형을 맞춘다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>rectangle</td>
+                                <td>Rectangle</td>
+                                <td>복사하거나 맞출 Rectangle 객체</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </section>
+    <script src="/common/js/pixi.js"></script>
+    <script src="/common/js/pixi-spine.js"></script>
+    <script src="/common/js/common.js"></script>
+    <script src="./component.js"></script>
+</body>
+
+</html>

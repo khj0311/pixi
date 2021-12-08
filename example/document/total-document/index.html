@@ -1,0 +1,2272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIXI Slots</title>
+
+    <link rel="stylesheet" href="/common/css/common.css">
+</head>
+
+<body>
+    <div class="pixi-navigation">
+        <div class="pixi-navigation__button-wrap">
+            <button type="button" class="pixi-navigation__button">
+                <div class="pixi-navigation__bar-wrap">
+                    <div class="pixi-navigation__bar bar1"></div>
+                    <div class="pixi-navigation__bar bar2"></div>
+                    <div class="pixi-navigation__bar bar3"></div>
+                    <div class="pixi-navigation__bar bar4"></div>
+                </div>
+            </button>
+        </div>
+        <div class="pixi-navigation__content">
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Basic</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="container">
+                        <a href="/example/basic/container">Container</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="particle-container">
+                        <a href="/example/basic/particle-container">Particle Container</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="tinting">
+                        <a href="/example/basic/tinting">Tinting</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="simple-plane">
+                        <a href="/example/basic/simple-plane">Simple Plane</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Advanced</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="slots">
+                        <a href="/example/advanced/slots">Slots</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="scratchcard">
+                        <a href="/example/advanced/scratchcard">Scratch Card</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="mouse-trail">
+                        <a href="/example/advanced/mouse-trail">Mouse Trail</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="starwarp">
+                        <a href="/example/advanced/starwarp">Star Warp</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Documents</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="total-document">
+                        <a href="/example/document/total-document">Documents</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pixi-navigation__logo">HJ</div>
+    </div>
+    <section class="pixi">
+        <div class="pixi-wrap pixi-document-display-object">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-display-object">🔗</a>
+                <a id="pixi-display-object" class="pixi-accordion__title has-content">
+                    PIXI.DisplayObject
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.DisplayObject.html">https://pixijs.download/release/docs/PIXI.DisplayObject.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">화면에 Rendering되는 모든 개체의 기본 Class.</div>
+                    <div class="pixi-desc--sentence">이것은 추상 Class이며 자체적으로 사용할 수 없다.</div>
+                    <br>
+                    <div class="pixi-subtitle">PixiJS에서 구현된 디스플레이 객체</div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>Display Object</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>PIXI.Container</td>
+                            <td>DisplayObject를 추가할 수 있는 컨테이너 객체</td>
+                        </tr>
+                        <tr>
+                            <td>PIXI.Graphics</td>
+                            <td>Canvas API와 유사한 모양 그리기 표시 객체</td>
+                        </tr>
+                        <tr>
+                            <td>PIXI.Sprite</td>
+                            <td>텍스처(이미지)를 그림</td>
+                        </tr>
+                        <tr>
+                            <td>PIXI.Text</td>
+                            <td>내부적으로 Canvas API를 사용하여 텍스트를 그린다.</td>
+                        </tr>
+                        <tr>
+                            <td>PIXI.TilingSprite</td>
+                            <td>타일 방식으로 Texture/Image를 그린다.</td>
+                        </tr>
+                        <tr>
+                            <td>PIXI.AnimatedSprite</td>
+                            <td>여러 이미지의 애니메이션을 그린다.</td>
+                        </tr>
+                        <tr>
+                            <td>PIXI.Mesh</td>
+                            <td>사용자 지정 데이터로 Mesh를 그리기 위한 하위 수준 API 제공</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Transforms</div>
+                    <div class="pixi-desc--sentence">디스플레이 객체의 Transform은 로컬 좌표공간에서 부모 좌표공간으로의 투영을 기술한다.</div>
+                    <div class="pixi-desc--sentence">다음 속성은 Transform에서 얻는다.</div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>Property</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>pivot</td>
+                            <td>rotation, scaling 및 skew 아래 변경 불가하다. pivot의 부모 공간에 대한 투영은 다른 세 가지 변환과 관계없이 위치와 동일하다. 즉,
+                                rotation, scaling 및 skew의 중심이다.</td>
+                        </tr>
+                        <tr>
+                            <td>position</td>
+                            <td>부모 로컬공간의 pivot 위치이다. pivot의 기본값은 origin(0,0)이다. 디스플레이 객체의 좌측 상단 모서리가 로컬공간에 있는 경우, 그 위치는
+                                부모의 로컬공간에 있는 좌측 상단 모서리가 된다.</td>
+                        </tr>
+                        <tr>
+                            <td>scale</td>
+                            <td>디스플레이 개체의 투영이 늘어나거나 압축된다. 스케일 팩터는 로컬 좌표 축을 따라 있다. 즉, 디스플레이 표시 객체는 회전하거나 치우치기 전에 축척이
+                                조정된다. 스케일링의 중심은 pivot이다.</td>
+                        </tr>
+                        <tr>
+                            <td>rotation</td>
+                            <td>디스플레이 표시 객체의 투영이 이 각도(radian 단위)로 회전한다.</td>
+                        </tr>
+                        <tr>
+                            <td>angle</td>
+                            <td>각도 단위로 된 회전 별칭.</td>
+                        </tr>
+                        <tr>
+                            <td>skew</td>
+                            <td>직사각형 디스플레이 표시 객체를 평행사변형으로 변형하는 데 사용할 수 있다.</td>
+                        </tr>
+                        <tr>
+                            <td>x</td>
+                            <td>x 좌표</td>
+                        </tr>
+                        <tr>
+                            <td>y</td>
+                            <td>y 좌표</td>
+                        </tr>
+                        <tr>
+                            <td>width</td>
+                            <td>Container에 구현된다. width 속성은 요청된 너비를 로컬공간 상자 너비로 나누어 scale.x를 계산한다. scale.x에 대한 간접적인 추상화이며
+                                사용자 정의 너비에 대한 개념은 없다.</td>
+                        </tr>
+                        <tr>
+                            <td>height</td>
+                            <td>Container에 구현된다. height 속성은 요청된 높이를 로컬공간 상자 높이로 나누어 scale.y를 계산한다. scale.y에 대한 간접적인
+                                추상화이며 사용자 정의 높이에 대한 개념은 없다.</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-application">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-application">🔗</a>
+                <a id="pixi-application" class="pixi-accordion__title has-content">
+                    PIXI.Application
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Application.html">https://pixijs.download/release/docs/PIXI.Application.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">새로운 PIXI 애플리케이션을 생성하기 위한 편의 클래스이며, Renderer, Ticker 및 루트 컨테이너를 자동으로
+                        생성한다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Example</div>
+                    <pre class="pixi-codeblock"><code>
+// Application 생성
+const app = new PIXI.Application();
+
+// DOM에 view 추가
+document.body.appendChild(app.view);
+
+// 예시) 표시할 스프라이트 객체 추가
+app.stage.addChild(PIXI.Sprite.from('something.png'));
+                  </code></pre>
+                    <pre class="pixi-codeblock"><code>
+var app = new PIXI.Application({
+    view: document.getElementById('container'),
+    width: 800,
+    height: 800,
+    backgroundColor: 0xa0f584,
+    resolution: window.devicePixelRatio || 1
+});
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.Application (options)</strong></div>
+                    <div class="pixi-desc">
+
+                    </div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>options</td>
+                            <td>object</td>
+                            <td></td>
+                            <td>선택적 Renderer 매개변수</td>
+                        </tr>
+                        <tr>
+                            <td>options.width</td>
+                            <td>number</td>
+                            <td>800</td>
+                            <td>Renderer View의 너비 지정</td>
+                        </tr>
+                        <tr>
+                            <td>options.height</td>
+                            <td>number</td>
+                            <td>600</td>
+                            <td>Renderer View의 높이 지정</td>
+                        </tr>
+                        <tr>
+                            <td>options.view</td>
+                            <td>HTMLCanvasElement</td>
+                            <td></td>
+                            <td>Renderer View로 사용할 캔버스 엘리먼트</td>
+                        </tr>
+                        <tr>
+                            <td>options.backgroundColor</td>
+                            <td>number</td>
+                            <td>0x000000</td>
+                            <td>Rendering 된 영역의 배경 색상 지정</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Members</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">stage
+                                    <span class="pixi-link">
+                                        <a href="#pixi-container">(PIXI.Container)</a>
+                                    </span>
+                                </strong>
+                                <p class="pixi-list__text">렌더링 되는 루트 디스플레이 컨테이너</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-container">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-container">🔗</a>
+                <a id="pixi-container" class="pixi-accordion__title has-content">
+                    PIXI.Container
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Container.html">https://pixijs.download/release/docs/PIXI.Container.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Container는 child를 포함하는 범용 표시 객체이며, Masking 및 Filtering과 같은 고급
+                        Rendering 기능에 대한 기본 기능을 제공한다.</div>
+                    <div class="pixi-desc--sentence">또한, Graphics 및 Sprite를 비롯한 다른 객체의 컨테이너 역할을 하는 모든 표시 객체의 기본 Class
+                        이다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Example</div>
+                    <pre class="pixi-codeblock"><code>
+var app = new PIXI.Application({
+    view: document.getElementById('container'),
+    width: 800,
+    height: 800,
+    backgroundColor: 0xa0f584,
+    resolution: window.devicePixelRatio || 1
+});
+
+var container = new PIXI.Container();
+
+app.stage.addChild(container);
+
+var texture = PIXI.Texture.from('/content/images/bunny.png');
+
+for (var i = 0; i < 25; i++) {
+    var bunny = new PIXI.Sprite(texture);
+    bunny.anchor.set(0.5);
+    bunny.scale.set(2);
+    bunny.x = (i % 5) * 100;
+    bunny.y = Math.floor(i / 5) * 100;
+    container.addChild(bunny);
+}
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">addChild (...children)</strong>
+                                <p class="pixi-list__text">컨테이너에 하나 이상의 자식을 추가한다.</p>
+                                <p class="pixi-list__text">다음과 같이 여러 항목을 추가할 수 있다. myContainer.addChild(thingOne,
+                                    thingTwo, thingThree)</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">removeChild (...children)</strong>
+                                <p class="pixi-list__text">컨테이너에 하나 이상의 자식을 제거한다.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>children</td>
+                            <td>
+                                <span class="pixi-link">
+                                    <a href="#pixi-display-object">PIXI.DisplayObject</a>
+                                </span>
+                            </td>
+                            <td>컨테이너에 추가할 DisplayObject(들)</td>
+                        </tr>
+                    </table>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">removeChildren (beginIndex, endIndex)</strong>
+                                <p class="pixi-list__text">시작 및 끝 인덱스 내에 있는 이 컨테이너에서 모든 자식을 제거한다.</p>
+                                <p class="pixi-list__text">(중간의 일부를 제거할 수는 없다.)</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>beginIndex</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>시작 인덱스</td>
+                        </tr>
+                        <tr>
+                            <td>endIndex</td>
+                            <td>number</td>
+                            <td>this.children.length</td>
+                            <td>끝 인덱스, 기본 값은 컨테이너의 크기</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Events</div>
+                    <pre class="pixi-codeblock"><code>
+container.on('childAdded', function(child, cont, index) {
+    console.log(child);
+    console.log(cont);
+    console.log(index);
+});
+                  </code></pre>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>child</td>
+                            <td>PIXI.DisplayObject</td>
+                            <td>컨테이너에 추가된 자식</td>
+                        </tr>
+                        <tr>
+                            <td>container</td>
+                            <td>PIXI.Container</td>
+                            <td>자식이 추가된 컨테이너</td>
+                        </tr>
+                        <tr>
+                            <td>index</td>
+                            <td>number</td>
+                            <td>마지막으로 추가된 자식의 인덱스</td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-particle-container">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-particle-container">🔗</a>
+                <a id="pixi-particle-container" class="pixi-accordion__title has-content">
+                    PIXI.ParticleContainer
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.ParticleContainer.html">https://pixijs.download/release/docs/PIXI.ParticleContainer.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">ParticleContainer 클래스는 오로지 속도만을 위해 만들어진 PIXI.Container의 정말 빠른 버전이므로
+                        많은 Sprite나 Particle이 필요할 때 사용한다.</div>
+                    <div class="pixi-desc--sentence">ParticleContainer의 단점은 대부분의 고급 기능이 작동하지 않는다는 것이다.
+                        ParticleContainer는 기본 개체 변환(위치, 크기, 회전) 및 색조와 같은 일부 고급 기능(v4.5.6 기준)을 구현한다.</div>
+                    <div class="pixi-desc--sentence">Masking, Children, Filters 등과 같은 기타 고급 기능은 이 batch의 Sprite에서는 작동하지
+                        않는다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Example</div>
+                    <pre class="pixi-codeblock"><code>
+var container = new ParticleContainer();
+
+for (var i = 0; i < 100; ++i) {
+    var sprite = PIXI.Sprite.from("myImage.png");
+    container.addChild(sprite);
+}
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.ParticleContainer (maxSize, properties, batchSize,
+                            autoResize)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>maxSize</td>
+                            <td>number</td>
+                            <td>1500</td>
+                            <td>Container에서 Rendering할 수 있는 최대 Particle 수. 할당된 버퍼의 크기에 영향을 준다.</td>
+                        </tr>
+                        <tr>
+                            <td>properties</td>
+                            <td>object</td>
+                            <td></td>
+                            <td>GPU에 업로드하여 적용해야하는 자식의 속성</td>
+                        </tr>
+                        <tr>
+                            <td>properties.vertices</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>true일 경우 정점이 업로드되고 적용된다. Sprite의 scale / anchor / trim / frame / orig가 동적이면 true로 설정한다.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>properties.position</td>
+                            <td>boolean</td>
+                            <td>true</td>
+                            <td>true일 경우 position이 업로드되어 적용된다.</td>
+                        </tr>
+                        <tr>
+                            <td>properties.rotation</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>true일 경우 rotation이 업로드되어 적용된다.</td>
+                        </tr>
+                        <tr>
+                            <td>properties.uvs</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>true일 경우 uv가 업로드되어 적용된다.</td>
+                        </tr>
+                        <tr>
+                            <td>properties.tint</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>true일 경우 alpha와 tint가 업로드되어 적용된다.</td>
+                        </tr>
+                        <tr>
+                            <td>batchSize</td>
+                            <td>number</td>
+                            <td>16384</td>
+                            <td>배치당 Particle 수. maxSize보다 작으면 maxSize가 대신 사용된다.</td>
+                        </tr>
+                        <tr>
+                            <td>autoResize</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>true일 경우 max Size보다 더 많은 Particle이 존재할 경우에 대비하여 Container에 더 많은 batch가 할당된다.</td>
+                        </tr>
+                    </table>
+                    <pre class="pixi-codeblock"><code>
+var app = new PIXI.Application({
+    view: document.getElementById('particleContainer'),
+    width: 800,
+    height: 800
+});
+
+var sprites = new PIXI.ParticleContainer(100, {
+    scale: true,
+    position: true,
+    rotation: true,
+    uvs: true,
+    alpha: true
+});
+
+app.stage.addChild(sprites);
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">destroy (options)</strong>
+                                <p class="pixi-list__text">컨테이너를 파괴한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>options</td>
+                                <td>object | boolean</td>
+                                <td></td>
+                                <td>옵션 매개변수. true일 경우 모든 옵션이 해당 값으로 설정된 것처럼 작동한다.</td>
+                            </tr>
+                            <tr>
+                                <td>options.children</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>true일 경우 모든 자식의 destroy 메소드도 호출된다.</td>
+                            </tr>
+                            <tr>
+                                <td>options.texture</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>options.children이 true일 경우 자식 Sprite에만 사용된다. 자식 Sprite의 Texture가 파괴된다.</td>
+                            </tr>
+                            <tr>
+                                <td>options.baseTexture</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>options.children이 true일 경우 자식 Sprite에만 사용된다. 자식 Sprite의 기본 Texture가 파괴된다.</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">setProperties (properties)</strong>
+                                <p class="pixi-list__text">전달된 속성 개체를 기반으로 private 속성 배열을 동적/정적으로 설정한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>properties</td>
+                                <td>object</td>
+                                <td></td>
+                                <td>업로드할 속성</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-sprite">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-sprite">🔗</a>
+                <a id="pixi-sprite" class="pixi-accordion__title has-content">
+                    PIXI.Sprite
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Sprite.html">https://pixijs.download/release/docs/PIXI.Sprite.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Sprite 개체는 화면에 렌더링되는 모든 Texture 개체의 기반이다.</div>
+                    <div class="pixi-desc--sentence">다음과 같이 이미지에서 직접 Sprite를 만들 수 있다.</div>
+                    <pre class="pixi-codeblock"><code>
+var sprite = PIXI.Sprite.from('assets/image.png');
+                  </code></pre>
+                    <div class="pixi-desc--sentence">스프라이트를 생성하는 더 효율적인 방법은 PIXI.Spritesheet를 사용하는 것이다.</div>
+                    <div class="pixi-desc--sentence">화면에 렌더링할 때 기본 Texture를 바꾸는 것이 비효율적이기 때문이다.</div>
+                    <pre class="pixi-codeblock"><code>
+PIXI.Loader.shared.add("assets/spritesheet.json").load(setup);
+
+function setup() {
+    var sheet = PIXI.Loader.shared.resources["assets/spritesheet.json"].spritesheet;
+    var sprite = new PIXI.Sprite(sheet.textures["image.png"]);
+    ...
+}
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.Sprite (texture)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>texture</td>
+                            <td>PIXI.Texture</td>
+                            <td>Sprite에 대한 Texture</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">PIXI.Sprite.from (source, options)</strong>
+                                <p class="pixi-list__text">제공한 소스를 기반으로 새 Sprite를 생성하는 도우미 함수.</p>
+                                <p class="pixi-list__text">source는 프레임 ID, 이미지 URL, 비디오 URL, 캔버스 요소, 비디오 요소, 기본 텍스처일 수
+                                    있다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>source</td>
+                                <td>string | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | PIXI.BaseTexture
+                                </td>
+                                <td>Texture를 생성할 source</td>
+                            </tr>
+                            <tr>
+                                <td>options</td>
+                                <td>object</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a
+                                            href="https://pixijs.download/release/docs/PIXI.BaseTexture.html">PIXI.BaseTexture</a>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">containsPoint (point)</strong>
+                                <p class="pixi-list__text">확인할 point가 스프라이트 내부에 있는지 테스트하는 메서드.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>point</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a href="/example/advanced/mouse-trail#pixi-ipoint">IPointData</a>
+                                    </span>
+                                </td>
+                                <td>테스트 포인트 (x, y)</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">destroy ()</strong>
+                                <p class="pixi-list__text">이 Sprite와 선택적으로 Texture와 자식을 파괴하는 메서드.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>options</td>
+                                <td>IDestroyOptions | boolean</td>
+                                <td></td>
+                                <td>옵션 매개변수. true 일 경우 모든 옵션이 해당 값으로 설정된 것처럼 작동</td>
+                            </tr>
+                            <tr>
+                                <td>options.children</td>
+                                <td></td>
+                                <td>false</td>
+                                <td>true일 경우 모든 자식의 destroy 메소드를 호출</td>
+                            </tr>
+                            <tr>
+                                <td>options.texture</td>
+                                <td></td>
+                                <td>false</td>
+                                <td>Sprite의 Texture도 파괴</td>
+                            </tr>
+                            <tr>
+                                <td>options.baseTexture</td>
+                                <td></td>
+                                <td>false</td>
+                                <td>Sprite의 기본 Texture도 파괴</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-texture">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-texture">🔗</a>
+                <a id="pixi-texture" class="pixi-accordion__title has-content">
+                    PIXI.Texture
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Texture.html">https://pixijs.download/release/docs/PIXI.Texture.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Texture는 이미지 또는 이미지의 일부를 나타내는 정보를 저장한다.</div>
+                    <div class="pixi-desc--sentence">Display List에 직접 추가할 수 없으며 Sprite의 Texture로 사용해야 한다.</div>
+                    <div class="pixi-desc--sentence">Texture에 프레임이 제공되지 않으면 전체 이미지가 사용된다.</div>
+                    <div class="pixi-desc--sentence">　</div>
+                    <div class="pixi-desc--sentence">이미지에서 직접 Texture를 만든 다음 다음과 같이 여러 번 재사용할 수 있다.</div>
+                    <pre class="pixi-codeblock"><code>
+var texture = PIXI.Texture.from('/content/images/bunny.png');
+var bunny1 = new PIXI.Sprite(texture);
+var bunny2 = new PIXI.Sprite(texture);
+                      </code></pre>
+                    <div class="pixi-desc--sentence">텍스처 프레임을 생성자에 전달하지 않으면 noFrame 모드가 활성화된다.</div>
+                    <div class="pixi-desc--sentence">baseTexture 이벤트를 구독하고 baseTexture와 동시에 자동으로 크기가 조정된다.</div>
+                    <div class="pixi-desc--sentence">　</div>
+                    <div class="pixi-desc--sentence">로드 여부와 관계없이 SVG로 만든 텍스처는 파일 처리가 완료되기 전에 사용할 수 없다.</div>
+                    <div class="pixi-desc--sentence">PIXI.Sprite의 _textureID 속성을 확인하여 이를 확인할 수 있다.</div>
+                    <pre class="pixi-codeblock"><code>
+var texture = PIXI.Texture.from('assets/image.svg');
+var sprite1 = new PIXI.Sprite(texture);
+//sprite1._textureID
+                      </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.Texture (baseTexture, frame, orig, trim, rotate,
+                            anchor)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>baseTexture</td>
+                            <td>PIXI.BaseTexture</td>
+                            <td>Texture를 생성 할 기본 Texture source</td>
+                        </tr>
+                        <tr>
+                            <td>frame</td>
+                            <td>PIXI.Rectangle</td>
+                            <td>표시할 Texture의 사각 프레임</td>
+                        </tr>
+                        <tr>
+                            <td>orig</td>
+                            <td>PIXI.Rectangle</td>
+                            <td>기본 Texture 영역</td>
+                        </tr>
+                        <tr>
+                            <td>trim</td>
+                            <td>PIXI.Rectangle</td>
+                            <td>기본 Texture의 트리밍 된 사각형</td>
+                        </tr>
+                        <tr>
+                            <td>rotate</td>
+                            <td>number</td>
+                            <td>Texture packer가 Texture를 회전할 각도를 표시</td>
+                        </tr>
+                        <tr>
+                            <td>anchor</td>
+                            <td>
+                                <span class="pixi-link">
+                                    <a href="/example/advanced/mouse-trail#pixi-ipoint">PIXI.IPointData</a>
+                                </span>
+                            </td>
+                            <td>Sprite 배치/회전에 사용되는 기본 앵커 포인트</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">PIXI.Texture.from (source, options, strict)</strong>
+                                <p class="pixi-list__text">제공한 소스를 기반으로 새 Texture를 생성하는 도우미 함수.</p>
+                                <p class="pixi-list__text">source는 프레임 ID, 이미지 URL, 비디오 URL, 캔버스 요소, 비디오 요소, 기본 텍스처일 수
+                                    있다.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>source</td>
+                            <td>string | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | PIXI.BaseTexture</td>
+                            <td>Texture를 생성할 source</td>
+                        </tr>
+                        <tr>
+                            <td>options</td>
+                            <td>object</td>
+                            <td>
+                                <span class="pixi-link">
+                                    <a
+                                        href="https://pixijs.download/release/docs/PIXI.BaseTexture.html">PIXI.BaseTexture</a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>strict</td>
+                            <td>number</td>
+                            <td>strict mode 적용</td>
+                        </tr>
+                    </table>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">clone ()</strong>
+                                <p class="pixi-list__text">해당 Texture와 같은 역할을 하는 새로운 Texture 개체를 만든다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">destroy ()</strong>
+                                <p class="pixi-list__text">해당 Texture를 파괴한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">update ()</strong>
+                                <p class="pixi-list__text">GPU에서 해당 Texture를 업데이트한다.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-simple-plane">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-simple-plane">🔗</a>
+                <a id="pixi-simple-plane" class="pixi-accordion__title has-content">
+                    PIXI.SimplePlane
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.SimplePlane.html">https://pixijs.download/release/docs/PIXI.SimplePlane.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Simple Plane을 사용하면 여러 포인트에 걸쳐 텍스처를 그리며 이 포인트들을 조작할 수 있다.</div>
+                    <pre class="pixi-codeblock"><code>
+for (var i = 0; i < 20; i++) {
+    points.push(new PIXI.Point(i * 50, 0));
+};
+var SimplePlane = new PIXI.SimplePlane(PIXI.Texture.from("snake.png"), points);
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.SimplePlane (texture, verticesX,
+                            verticesY)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>texture</td>
+                            <td>PIXI.Textrue</td>
+                            <td>Container에서 Rendering할 수 있는 최대 Particle 수. 할당된 버퍼의 크기에 영향을 준다.</td>
+                        </tr>
+                        <tr>
+                            <td>verticesX</td>
+                            <td>number</td>
+                            <td>GPU에 업로드하여 적용해야하는 자식의 속성</td>
+                        </tr>
+                        <tr>
+                            <td>verticesY</td>
+                            <td>number</td>
+                            <td>true일 경우 정점이 업로드되고 적용된다. Sprite의 scale / anchor / trim / frame / orig가 동적이면 true로 설정한다.
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">textureUpdated ()</strong>
+                                <p class="pixi-list__text">텍스처 프레임이 변경되었을 때 오버라이드하게 사용되는 메서드.</p>
+                                <p class="pixi-list__text">평면에 근거한 메쉬는 그것을 덮어 쓰고 텍스처를 기반으로 보다 상세사항을 변경할 수 있다.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-loader">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-loader">🔗</a>
+                <a id="pixi-loader" class="pixi-accordion__title has-content">
+                    PIXI.Loader
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Loader.html">https://pixijs.download/release/docs/PIXI.Loader.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">PIXI.Loader 라이브러리는 데이터를 비동기식으로 로드하고 준비하기 쉽도록 제작되어있다.</div>
+                    <div class="pixi-desc--sentence">주로 데이터 로드를 위해 노출되는 다양한 API 브라우저를 통합하고 버전과 공급체간의 차이를 완화한다.</div>
+                    <div class="pixi-desc--sentence">PIXI.Loader의 목표는 리소스 캐싱 및 관리 시스템이 아니라 로더일 뿐이다.</div>
+                    <div class="pixi-desc--sentence">PIXI.Loader는 데이터를 로드하는 실제 메커니즘을 위한 것이다.</div>
+                    <div class="pixi-desc--sentence">모든 캐싱, 리소스 관리, 로드된 항목과 로드되지 않은 항목 파악, 로드할 항목 결정 등은 모두 PIXI.Loader
+                        외부에 논리로 존재해야 한다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Example</div>
+                    <pre class="pixi-codeblock"><code>
+// var loader = PIXI.Loader.shared; // PixiJS는 사용할 미리 만들어진 인스턴스를 제공한다.
+var loader = new PIXI.Loader(); // 또는 원하는 경우 직접 만들 수도 있다.
+var sprites = {};
+
+loader.add('bunny', '/content/images/bunny.png')
+    .add('spaceship', '/content/assets/spritesheet.json');
+loader.add('scoreFont', '/content/assets/score.fnt');
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.Loader (baseUrl, concurrency)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>baseUrl</td>
+                            <td>string</td>
+                            <td>''</td>
+                            <td>이 Loader에 의해 로드된 모든 리소스의 기본 URL.</td>
+                        </tr>
+                        <tr>
+                            <td>properties</td>
+                            <td>number</td>
+                            <td>10</td>
+                            <td>동시에 로드할 리소스의 수.</td>
+                        </tr>
+                    </table>
+                    <pre class="pixi-codeblock"><code>
+loader.add('bunny', '/content/images/bunny.png')
+    .add('spaceship', '/content/assets/spritesheet.json');
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">load (callback)</strong>
+                                <p class="pixi-list__text">대기 중인 리소스 로드를 시작한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>callback</td>
+                                <td>Loader.OnCompleteSignal</td>
+                                <td>complete 이벤트에 바인딩될 선택적 콜백.</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">pre (fn)</strong>
+                                <p class="pixi-list__text">리소스가 로드되기 전에 실행할 미들웨어 기능을 설정한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">use (fn)</strong>
+                                <p class="pixi-list__text">리소스가 로드된 후 실행할 미들웨어 기능을 설정한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>fn</td>
+                                <td>ILoaderMiddleware</td>
+                                <td>등록할 미들웨어 기능.</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">destroy ()</strong>
+                                <p class="pixi-list__text">로더를 파괴하고 참조를 제거한다.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-ticker">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-ticker">🔗</a>
+                <a id="pixi-ticker" class="pixi-accordion__title has-content">
+                    PIXI.Ticker
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Ticker.html">https://pixijs.download/release/docs/PIXI.Ticker.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">다른 개체가 수신하는 업데이트 루프를 실행하는 Ticker 클래스.</div>
+                    <div class="pixi-desc--sentence">이 클래스는 요청된 애니메이션 프레임에서 실행하기 위한 리스너를 중심으로 구성된다.</div>
+                    <div class="pixi-desc--sentence">Ticker가 시작되고 Emitter에 리스너가 있는 경우 애니메이션 프레임은 필요할 때만 요청된다.</div>
+                    <pre class="pixi-codeblock"><code>
+app.ticker.add(function(delta) {
+    container.rotation -= 0.01 * delta;
+});
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">add (fn, context, priority)</strong>
+                                <p class="pixi-list__text">Tick 이벤트에 대한 Handler를 추가한다.</p>
+                                <p class="pixi-list__text">제거되거나 Ticker가 중지되지 않는 한 계속해서 호출한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">addOnce (fn, context, priority)</strong>
+                                <p class="pixi-list__text">한 번만 실행되는 Tick 이벤트에 대한 Handler를 추가한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">remove (fn, context)</strong>
+                                <p class="pixi-list__text">함수 및 context 매개변수와 일치하는 모든 Handler를 제거한다.</p>
+                                <p class="pixi-list__text">제거한 후 Handler가 남지 않으면 애니메이션 프레임이 취소된다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>fn</td>
+                                <td>TickerCallback</td>
+                                <td></td>
+                                <td>한 번의 업데이트에 추가/삭제 될 Ticker Listener 기능</td>
+                            </tr>
+                            <tr>
+                                <td>context</td>
+                                <td>T</td>
+                                <td></td>
+                                <td>Listener 컨텍스트</td>
+                            </tr>
+                            <tr>
+                                <td>priority</td>
+                                <td>number</td>
+                                <td>PIXI.UPDATE_PRIORITY.NORMAL</td>
+                                <td>실행 순서 우선순위</td>
+                            </tr>
+                        </table>
+                        <pre class="pixi-codeblock"><code>
+var tickerAnim = function(delta) {
+    container.rotation -= 0.01 * delta;
+};
+
+var addTickerFunc = function() {
+    app.ticker.add(tickerAnim);
+};
+
+var removeTickerFunc = function() {
+    app.ticker.remove(tickerAnim);
+};
+
+var addTicker = document.querySelector('#addTicker');
+if (addTicker) addTicker.addEventListener('click', addTickerFunc);
+
+var removeTicker = document.querySelector('#removeTicker');
+if (removeTicker) removeTicker.addEventListener('click', removeTickerFunc);
+                      </code></pre>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">destroy ()</strong>
+                                <p class="pixi-list__text">이 메서드를 호출하면 내부 이벤트에 대한 모든 참조가 제거된다.</p>
+                                <p class="pixi-list__text">Ticker를 파괴하고 이후에는 사용하지 말아야 한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">start ()</strong>
+                                <p class="pixi-list__text">Ticker를 시작한다.</p>
+                                <p class="pixi-list__text">Ticker에 리스너가 있는 경우 이 시점(처음 시작 또는 정지되어있던 프레임)에서 새 애니메이션 프레임이
+                                    요청된다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">stop ()</strong>
+                                <p class="pixi-list__text">Ticker를 중지한다.</p>
+                                <p class="pixi-list__text">Ticker가 애니메이션 프레임을 요청한 경우 이 시점에서 취소된다.</p>
+                            </li>
+                        </ul>
+                        <pre class="pixi-codeblock"><code>
+var startTicker = document.querySelector('#startTicker');
+if (startTicker) {
+    startTicker.addEventListener('click', function() {
+        app.ticker.start();
+    });
+}
+
+var stopTicker = document.querySelector('#stopTicker');
+if (stopTicker) {
+    stopTicker.addEventListener('click', function() {
+        app.ticker.stop();
+    });
+}
+                      </code></pre>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-rectangle">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-rectangle">🔗</a>
+                <a id="pixi-rectangle" class="pixi-accordion__title has-content">
+                    PIXI.Rectangle
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Rectangle.html">https://pixijs.download/release/docs/PIXI.Rectangle.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Rectangle 개체는 왼쪽 위 모서리 지점(x, y)과 너비 및 높이로 표시되는 위치로 정의되는 영역이다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.Rectangle (x, y, width, height)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>x</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>직사각형의 왼쪽 위 모서리의 X 좌표</td>
+                        </tr>
+                        <tr>
+                            <td>y</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>직사각형의 왼쪽 위 모서리의 Y 좌표</td>
+                        </tr>
+                        <tr>
+                            <td>width</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>직사각형의 전체 너비</td>
+                        </tr>
+                        <tr>
+                            <td>height</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>직사각형의 전체 높이</td>
+                        </tr>
+                    </table>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">destroy (options)</strong>
+                                <p class="pixi-list__text">모서리가 그리드에 놓이도록 직사각형을 확대한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>resolution</td>
+                                <td>number</td>
+                                <td>1</td>
+                                <td>해상도</td>
+                            </tr>
+                            <tr>
+                                <td>eps</td>
+                                <td>number</td>
+                                <td>0.001</td>
+                                <td>정밀도</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">clone ()</strong>
+                                <p class="pixi-list__text">이 직사각형의 복제본을 만든다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">contains (x, y)</strong>
+                                <p class="pixi-list__text">주어진 x 및 y 좌표가 이 직사각형 내에 포함되어 있는지 확인한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x</td>
+                                <td>number</td>
+                                <td>테스트할 점의 X 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>y</td>
+                                <td>number</td>
+                                <td>테스트할 점의 Y 좌표</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">containsRect (other)</strong>
+                                <p class="pixi-list__text">이 직사각형 개체 내에 다른 직사각형이 포함되어 있는지 여부를 결정한다.</p>
+                                <p class="pixi-list__text">동일한 공간을 차지하는 직사각형은 서로를 포함하는 것으로 간주한다.</p>
+                                <p class="pixi-list__text">영역이 없는 직사각형(너비 또는 높이가 0임)은 다른 영역이 없는 직사각형도 포함하여 아무 것도 포함할 수
+                                    없다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">equals (other)</strong>
+                                <p class="pixi-list__text">다른 직사각형을 허용하고 주어진 직사각형이 이 직사각형과 같으면 true를 반환한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x</td>
+                                <td>Rectangle</td>
+                                <td>포함되어 있는지 확인 할 Rectangle 객체</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">copyFrom (rectangle)</strong>
+                                <p class="pixi-list__text">이 직사각형에 다른 직사각형을 복사한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">copyTo (rectangle)</strong>
+                                <p class="pixi-list__text">이 직사각형을 다른 직사각형에 복사한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">fit (rectangle)</strong>
+                                <p class="pixi-list__text">전달된 직사각형 주위에 이 직사각형을 맞춘다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>rectangle</td>
+                                <td>Rectangle</td>
+                                <td>복사하거나 맞출 Rectangle 객체</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-graphics">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-graphics">🔗</a>
+                <a id="pixi-graphics" class="pixi-accordion__title has-content">
+                    PIXI.Graphics
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Graphics.html">https://pixijs.download/release/docs/PIXI.Graphics.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Graphics 클래스는 주로 선, 원 및 직사각형과 같은 기본 모양을 디스플레이에 렌더링하고 색상을 지정하고 채우는 데
+                        사용된다.</div>
+                    <div class="pixi-desc--sentence">그러나 Graphics 개체를 사용하여 마스크 또는 복잡한 hitArea로 사용할 기본 요소 목록을 작성할 수도 있다.
+                    </div>
+                    <br>
+                    <div class="pixi-desc--sentence">Regacy 명명 규칙으로 인해 이 클래스의 일부 함수 동작이 혼동될 수 있다.</div>
+                    <div class="pixi-desc--sentence">drawRect(), drawPolygon() 등에 대한 각 호출은 실제로 나중에 렌더링 또는 적중 테스트에 사용하기
+                        위해 Geometry 클래스의 GraphicsGeometry 객체에 해당 Primitive를 저장한다.</div>
+                    <div class="pixi-desc--sentence">마찬가지로 clear() 함수는 화면을 변경하지 않고 단순히 기본 요소 목록을 재설정하므로 기존 Graphics 객체의
+                        내용을 다시 작성하려는 경우에 유용할 수 있다.</div>
+                    <br>
+                    <div class="pixi-desc--sentence">GraphicsGeometry 목록이 작성되면 이를 새 Geometry 개체의 생성자에 전달하여 최적화로 다른
+                        Geometry 개체에서 재사용할 수 있다.</div>
+                    <div class="pixi-desc--sentence">이 기능 때문에 각 GraphicsGeometry를 적절하게 역참조하고 메모리 누수를 방지하기 위해 Geometry
+                        개체에 대해 destroy()를 호출하는 것이 중요하다.</div>
+                    <pre class="pixi-codeblock"><code>
+var top = new PIXI.Graphics();
+top.beginFill(0, 1);
+top.drawRect(0, 0, obj.app.screen.width, margin);
+var bottom = new PIXI.Graphics();
+bottom.beginFill(0, 1);
+bottom.drawRect(0, (obj.symbolSize * 3) + margin, obj.app.screen.width, margin);
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.Graphics (geometry)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>geometry</td>
+                            <td>
+                                <span class="pixi-link">
+                                    <a href="#pixi-container">PIXI.Container</a>
+                                </span>
+                            </td>
+                            <td>null</td>
+                            <td>사용할 geometry를 생략하면 새 GraphicsGeometry 인스턴스가 생성된다.</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Members</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">blendMode : number</strong>
+                                <p class="pixi-list__text">그래픽 모양에 적용할 혼합 모드. 블렌드 모드를 재설정하려면 PIXI.BLEND_MODES.NORMAL 값을
+                                    적용해야한다.</p>
+                                <p class="pixi-list__text">GraphicsGeometry 목록의 각 프리미티브는 순차적으로 렌더링되므로
+                                    PIXI.BLEND_MODES.ADD 및 PIXI.BLEND_MODES.MULTIPLY와 같은 모드가 프리미티브별로 적용된다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">cacheAsBitmap : boolean</strong>
+                                <p class="pixi-list__text">cacheAsBitmap이 true로 설정되면 그래픽 객체는 마치 스프라이트인 것처럼 렌더링된다.</p>
+                                <p class="pixi-list__text">이것은 그래픽 요소가 자주 변경되지 않는 경우에 유용한데, 텍스처 메모리를 차지하는 대신 개체의 렌더링 속도를
+                                    높일 수 있기 때문이다.</p>
+                                <p class="pixi-list__text">또한 그래픽 개체가 Canvas를 사용하여 렌더링되기 때문에 앤티앨리어싱이 필요한 경우에도 유용하다.</p>
+                                <p class="pixi-list__text">그래픽 요소를 지속적으로 다시 그리는 경우에는 권장하지 않는다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">currentPath : PIXI.Polygon</strong>
+                                <p class="pixi-list__text">현재 경로</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">fill : PIXI.FillStyle</strong>
+                                <p class="pixi-list__text">현재 채우기 스타일</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">geometry :
+                                    <span class="pixi-link">
+                                        <a href="#pixi-graphics-geometry">PIXI.GraphicsGeometry</a>
+                                    </span>
+                                </strong>
+                                <p class="pixi-list__text">정점 위치, 면 인덱스, 법선, 색상, UV 및 버퍼 내의 사용자 정의 속성을 포함하여 이 모든 데이터를
+                                    GPU에 전달하는 비용을 줄인다.</p>
+                                <p class="pixi-list__text">여러 Mesh 또는 Graphics 개체 간에 공유할 수 있다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">line : PIXI.LineStyle</strong>
+                                <p class="pixi-list__text">현재 선 스타일</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">pluginName : string</strong>
+                                <p class="pixi-list__text">일괄 처리를 위한 렌더링 플러그인</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">shader : PIXI.Shader</strong>
+                                <p class="pixi-list__text">Geometry를 처리하고 GPU에서 실행되는 꼭짓점 및 조각 Shader를 나타낸다. 여러 Graphics
+                                    개체 간에 공유할 수 있다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">tint : number</strong>
+                                <p class="pixi-list__text">각 Graphic 모양에 적용되는 틴트. 16진수 값을 사용하며 값을 0xFFFF로 설정하면 틴트의 영향이
+                                    없어진다.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">arc (cx, cy, radius, startAngle, endAngle,
+                                    anticlockwise)</strong>
+                                <p class="pixi-list__text">호/곡선을 생성한다. (원 또는 원의 일부를 생성하는 데 사용)</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>cx</td>
+                                <td>number</td>
+                                <td></td>
+                                <td>원 중심의 x 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>cy</td>
+                                <td>number</td>
+                                <td></td>
+                                <td>원 중심의 y 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>radius</td>
+                                <td>number</td>
+                                <td></td>
+                                <td>원의 반경</td>
+                            </tr>
+                            <tr>
+                                <td>startAngle</td>
+                                <td>number</td>
+                                <td></td>
+                                <td>시작 각도 (0은 호 원의 3시 위치에 있음)</td>
+                            </tr>
+                            <tr>
+                                <td>endAngle</td>
+                                <td>number</td>
+                                <td></td>
+                                <td>종료 각도</td>
+                            </tr>
+                            <tr>
+                                <td>anticlockwise</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>도면이 시계 반대 방향인지 시계 방향인지 여부를 지정한다. False는 기본값이며 시계 방향을 나타내고 true는 시계 반대 방향을 나타낸다.</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">arcTo (x1, y1, x2, y2, radius)</strong>
+                                <p class="pixi-list__text">Canvas의 두 접선 사이에 호/곡선을 만든다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x1</td>
+                                <td>number</td>
+                                <td>호의 첫 번째 접선점의 x 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>y1</td>
+                                <td>number</td>
+                                <td>호의 첫 번째 접선점의 y 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>x2</td>
+                                <td>number</td>
+                                <td>호 끝의 x 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>y2</td>
+                                <td>number</td>
+                                <td>호 끝의 y 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>radius</td>
+                                <td>number</td>
+                                <td>호의 반경</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">beginFill (color, alpha)</strong>
+                                <p class="pixi-list__text">다른 Graphics 메서드(예: lineTo() 또는 drawCircle())에 대한 후속 호출이 그릴 때
+                                    사용하는 간단한 단색 채우기를 지정한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>color</td>
+                                <td>number</td>
+                                <td>0</td>
+                                <td>채우기의 색</td>
+                            </tr>
+                            <tr>
+                                <td>alpha</td>
+                                <td>number</td>
+                                <td>1</td>
+                                <td>채우기의 알파값</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">clear ()</strong>
+                                <p class="pixi-list__text">이 Graphics 개체에 그려진 그래픽을 지우고 채우기 및 선 스타일 설정을 재설정한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">clone ()</strong>
+                                <p class="pixi-list__text">이 값과 동일한 값으로 새 Graphics 개체를 만든다. 객체의 Geometry만 복제되고 변환(위치, 배율
+                                    등)이 복제되지 않는다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">closePath ()</strong>
+                                <p class="pixi-list__text">그리고있던 현재 경로를 닫는다. (새로운 경로를 그릴 경우)</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">destroy (options)</strong>
+                                <p class="pixi-list__text">Graphics 개체를 파괴한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>options</td>
+                                <td>object | boolean</td>
+                                <td></td>
+                                <td>옵션 매개변수. true 일 경우 모든 옵션이 해당 값으로 설정된 것처럼 작동</td>
+                            </tr>
+                            <tr>
+                                <td>options.children</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>true일 경우 모든 자식의 destroy 메소드를 호출</td>
+                            </tr>
+                            <tr>
+                                <td>options.texture</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>Sprite의 Texture도 파괴</td>
+                            </tr>
+                            <tr>
+                                <td>options.baseTexture</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>Sprite의 기본 Texture도 파괴</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">drawCircle (x, y, radius)</strong>
+                                <p class="pixi-list__text">원을 그린다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x</td>
+                                <td>number</td>
+                                <td>원 중심의 X 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>y</td>
+                                <td>number</td>
+                                <td>원 중심의 Y 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>radius</td>
+                                <td>number</td>
+                                <td>원의 반경</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">drawEllipse (x, y, width, height)</strong>
+                                <p class="pixi-list__text">타원을 그린다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x</td>
+                                <td>number</td>
+                                <td>타원 중심의 X 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>y</td>
+                                <td>number</td>
+                                <td>타원 중심의 Y 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>width</td>
+                                <td>number</td>
+                                <td>타원의 절반 너비</td>
+                            </tr>
+                            <tr>
+                                <td>height</td>
+                                <td>number</td>
+                                <td>타원의 절반 높이</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">drawPolygon (…path)</strong>
+                                <p class="pixi-list__text">주어진 경로를 사용하여 다각형을 그린다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>path</td>
+                                <td>Array<number> | Array<PIXI.Point> | PIXI.Polygon</td>
+                                <td>Polygon을 구성하는 데 사용되는 경로 데이터</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">drawRect (x, y, width, height)</strong>
+                                <p class="pixi-list__text">직사각형 모양을 그린다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x</td>
+                                <td>number</td>
+                                <td>직사각형의 왼쪽 상단의 X 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>y</td>
+                                <td>number</td>
+                                <td>직사각형의 왼쪽 상단의 Y 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>width</td>
+                                <td>number</td>
+                                <td>직사각형의 너비</td>
+                            </tr>
+                            <tr>
+                                <td>height</td>
+                                <td>number</td>
+                                <td>직사각형의 높이</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-graphics-geometry">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-graphics-geometry">🔗</a>
+                <a id="pixi-graphics-geometry" class="pixi-accordion__title has-content">
+                    PIXI.GraphicsGeometry
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.GraphicsGeometry.html">https://pixijs.download/release/docs/PIXI.GraphicsGeometry.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Graphics 클래스에는 선, 원 및 직사각형과 같은 기본 모양을 디스플레이에 그리고 색상을 지정하고 채우는 데
+                        사용되는 메서드가 포함되어 있다.</div>
+                    <div class="pixi-desc--sentence">GraphicsGeometry는 이어컷을 사용하여 다시 테셀레이션하는 데 비용이 많이 들기 때문에 형상을 지속적으로
+                        업데이트하지 않도록 설계되어있다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">clear ()</strong>
+                                <p class="pixi-list__text">이 Graphics 개체에 그려진 그래픽을 지우고 채우기 및 선 스타일 설정을 재설정한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">destroy ()</strong>
+                                <p class="pixi-list__text">GraphicsGeometry 개체를 파괴한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">containsPoint (point)</strong>
+                                <p class="pixi-list__text">Point가 이 Geometry 내에 포함되어 있는지 여부를 확인한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>point</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a href="/example/advanced/mouse-trail#pixi-ipoint">IPointData</a>
+                                    </span>
+                                </td>
+                                <td>포함되어 있는지 확인할 Point.</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-point">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-point">🔗</a>
+                <a id="pixi-point" class="pixi-accordion__title has-content">
+                    PIXI.Point
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Point.html">https://pixijs.download/release/docs/PIXI.Point.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Point 개체는 2차원 좌표계의 위치를 나타내며, 여기서 x는 가로 축의 위치를 나타내고 y는 세로축의 위치를
+                        나타낸다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong> new PIXI.Point (x, y)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>x</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>x축 위의 점 위치</td>
+                        </tr>
+                        <tr>
+                            <td>y</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>y축 위의 점 위치</td>
+                        </tr>
+                    </table>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">add (other, outPoint) : IPointData</strong>
+                                <p class="pixi-list__text">이 Point에 other를 추가하고 outPoint 또는 새 Point로 출력한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>other</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a href="/example/advanced/mouse-trail#pixi-ipoint">IPointData</a>
+                                    </span>
+                                </td>
+                                <td>이 Point에 추가할 다른 Point</td>
+                            </tr>
+                            <tr>
+                                <td>outPoint</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a href="/example/advanced/mouse-trail#pixi-ipoint">IPointData</a>
+                                    </span>
+                                </td>
+                                <td>값을 저장할 Point류 객체, 선택 사항(그렇지 않으면 새 Point가 생성됨).</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">clone () : PIXI.Point</strong>
+                                <p class="pixi-list__text">이 Point의 복제본을 만든다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">copyFrom (p) : this</strong>
+                                <p class="pixi-list__text">주어진 Point(p)에서 이 Point로 x와 y를 복사한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">copyTo (p) : T</strong>
+                                <p class="pixi-list__text">이 Point의 x와 y를 주어진 Point(p)에 복사한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>p</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a href="/example/advanced/mouse-trail#pixi-ipoint">IPointData</a>
+                                    </span>
+                                </td>
+                                <td>복사하거나 복사할 Point</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">dot (other) : number</strong>
+                                <p class="pixi-list__text">이 점과 다른 점의 내적을 계산한다. (내적 = 두 벡터의 해당 구성 요소의 곱의 합)</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>other</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a href="/example/advanced/mouse-trail#pixi-ipoint">IPointData</a>
+                                    </span>
+                                </td>
+                                <td>내적을 계산하는 다른 Point.</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">equals (p) : boolean</strong>
+                                <p class="pixi-list__text">다른 Point(p)을 받아들이고 주어진 Point가 이 Point와 같으면 true를 반환한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>p</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a href="/example/advanced/mouse-trail#pixi-ipoint">IPointData</a>
+                                    </span>
+                                </td>
+                                <td>확인할 Point.</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">set (p) : boolean</strong>
+                                <p class="pixi-list__text">Point를 새로운 x 및 y 위치로 설정한다. y를 생략하면 x와 y가 모두 x로 설정된다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x</td>
+                                <td>number</td>
+                                <td>0</td>
+                                <td>x축 위의 점 위치</td>
+                            </tr>
+                            <tr>
+                                <td>y</td>
+                                <td>number</td>
+                                <td>x</td>
+                                <td>y축 위의 점 위치</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-ipoint">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-ipoint">🔗</a>
+                <a id="pixi-ipoint" class="pixi-accordion__title has-content">
+                    PIXI.IPoint
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.IPoint.html">https://pixijs.download/release/docs/PIXI.IPoint.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Point 공통 인터페이스. Point와 Observable Point 모두 구현한다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>x</td>
+                            <td>number</td>
+                            <td>x 좌표</td>
+                        </tr>
+                        <tr>
+                            <td>y</td>
+                            <td>number</td>
+                            <td>y 좌표</td>
+                        </tr>
+                    </table>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">copyFrom (p) : this</strong>
+                                <p class="pixi-list__text">주어진 Point(p)에서 이 Point로 x와 y를 복사한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">copyTo (p) : T</strong>
+                                <p class="pixi-list__text">이 Point의 x와 y를 주어진 Point(p)에 복사한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>p</td>
+                                <td>IPointData</td>
+                                <td>복사하거나 복사할 Point</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">equals (p) : boolean</strong>
+                                <p class="pixi-list__text">다른 Point(p)을 받아들이고 주어진 Point가 이 Point와 같으면 true를 반환한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>p</td>
+                                <td>IPointData</td>
+                                <td>확인할 Point.</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">set (p) : boolean</strong>
+                                <p class="pixi-list__text">Point를 새로운 x 및 y 위치로 설정한다. y를 생략하면 x와 y가 모두 x로 설정된다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x</td>
+                                <td>number</td>
+                                <td>0</td>
+                                <td>x축 위의 점 위치</td>
+                            </tr>
+                            <tr>
+                                <td>y</td>
+                                <td>number</td>
+                                <td>x</td>
+                                <td>y축 위의 점 위치</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-simple-rope">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-simple-rope">🔗</a>
+                <a id="pixi-simple-rope" class="pixi-accordion__title has-content">
+                    PIXI.SimpleRope
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.SimpleRope.html">https://pixijs.download/release/docs/PIXI.SimpleRope.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Rope를 사용하면 여러 Point에 걸쳐 Texture를 그려 이들 Point를 조작할 수 있다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Example</div>
+                    <pre class="pixi-codeblock"><code>
+for (var i = 0; i < 20; i++) {
+    points.push(new PIXI.Point(i * 50, 0));
+}
+var rope = new PIXI.SimpleRope(PIXI.Texture.from("snake.png"), points);
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.SimpleRope (texture, points,
+                            textureScale)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>texture</td>
+                            <td>
+                                <span class="pixi-link">
+                                    <a href="/example/basic/container#pixi-texture">PIXI.Texture</a>
+                                </span>
+                            </td>
+                            <td></td>
+                            <td>Rope에 사용할 Texture</td>
+                        </tr>
+                        <tr>
+                            <td>points</td>
+                            <td>IPoint[]</td>
+                            <td></td>
+                            <td>이 Rope를 구성하기 위한 PIXI.Point 객체의 배열.</td>
+                        </tr>
+                        <tr>
+                            <td>textureScale</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>(선택 사항) 양수 값은 가로 세로 비율을 유지하면서 Rope Texture의 크기를 조정한다. 여기에서 더 큰 Texture와 다운샘플링을 제공하여 알파
+                                채널 아티팩트를 줄일 수 있다. 0으로 설정하면 텍스처가 대신 늘어난다.</td>
+                        </tr>
+                    </table>
+                    <div class="pixi-subtitle">Members</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">autoUpdate : boolean</strong>
+                                <p class="pixi-list__text">각 Frame마다 Rope 포인트로 정점을 다시 계산한다.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </section>
+    <script src="/common/js/pixi.js"></script>
+    <script src="/common/js/pixi-spine.js"></script>
+    <script src="/common/js/common.js"></script>
+    <script src="./component.js"></script>
+</body>
+
+</html>

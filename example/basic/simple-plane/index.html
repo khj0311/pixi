@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIXI Simple Plane</title>
+
+    <link rel="stylesheet" href="/common/css/common.css">
+</head>
+
+<body>
+    <div class="pixi-navigation">
+        <div class="pixi-navigation__button-wrap">
+            <button type="button" class="pixi-navigation__button">
+                <div class="pixi-navigation__bar-wrap">
+                    <div class="pixi-navigation__bar bar1"></div>
+                    <div class="pixi-navigation__bar bar2"></div>
+                    <div class="pixi-navigation__bar bar3"></div>
+                    <div class="pixi-navigation__bar bar4"></div>
+                </div>
+            </button>
+        </div>
+        <div class="pixi-navigation__content">
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Basic</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="container">
+                        <a href="/example/basic/container">Container</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="particle-container">
+                        <a href="/example/basic/particle-container">Particle Container</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="tinting">
+                        <a href="/example/basic/tinting">Tinting</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="simple-plane">
+                        <a href="/example/basic/simple-plane">Simple Plane</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Advanced</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="slots">
+                        <a href="/example/advanced/slots">Slots</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="scratchcard">
+                        <a href="/example/advanced/scratchcard">Scratch Card</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="mouse-trail">
+                        <a href="/example/advanced/mouse-trail">Mouse Trail</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="starwarp">
+                        <a href="/example/advanced/starwarp">Star Warp</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Documents</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="total-document">
+                        <a href="/example/document/total-document">Documents</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pixi-navigation__logo">HJ</div>
+    </div>
+    <section class="pixi pixi-simple-plane">
+        <div class="pixi-controller">
+            <div class="pixi-controller__title">
+                PIXI Simple Plane
+            </div>
+            <hr>
+            <div class="pixi-controller__container">
+                <div class="pixi-controller__canvas">
+                    <canvas id="simplePlane" width="800" height="800"></canvas>
+                </div>
+            </div>
+            <div class="pixi-title">Example Code</div>
+            <pre class="pixi-controller__codeblock"><code>
+;(function() {
+    'use strict';
+
+    window.pixi = window.pixi || {};
+    window.pixi.component = window.pixi.component || {};
+
+    pixi.component.simplePlane = (function() {
+        var obj = {};
+
+        var init = function() {
+            obj.section = document.querySelector('.pixi-simple-plane');
+
+            if (!!obj.section) {
+                setElements();
+                setLoader();
+                bindEvents();
+            }
+        };
+
+        var setElements = function() {
+            obj.simplePlaneApp = new PIXI.Application({
+                view: document.getElementById('simplePlane'),
+                width: 800,
+                height: 600,
+                backgroundColor: 0x1099bb,
+                resolution: window.devicePixelRatio || 1
+            });
+        };
+
+        var bindEvents = function() {
+
+        };
+
+        var buildSimplePlane = function() {
+            var texture = obj.simplePlaneApp.loader.resources.bg_grass.texture;
+
+            var verticesX = 10;
+            var verticesY = 10;
+            var plane = new PIXI.SimplePlane(texture, verticesX, verticesY);
+
+            plane.x = 100;
+            plane.y = 100;
+
+            obj.simplePlaneApp.stage.addChild(plane);
+
+            var buffer = plane.geometry.getBuffer('aVertexPosition');
+
+            obj.simplePlaneApp.ticker.add(function() {
+                for (var i = 0; i < buffer.data.length; i++) {
+                    buffer.data[i] += (Math.random() - 0.5);
+                }
+                buffer.update();
+            });
+        };
+
+        var setLoader = function() {
+            obj.simplePlaneApp.loader
+            .add('bg_grass', '/content/images/bg_grass.jpg')
+            .load(buildSimplePlane);
+        };
+
+        return {
+            init: init
+        }
+    })();
+
+    pixi.component.simplePlane.init();
+})();
+              </code></pre>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-display-object">
+            <div class="pixi-accordion">
+                <a id="pixi-display-object" href="/example/basic/container#pixi-display-object"
+                    class="pixi-accordion__title has-content">
+                    PIXI.DisplayObject
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-application">
+            <div class="pixi-accordion">
+                <a id="pixi-application" href="/example/basic/container#pixi-application"
+                    class="pixi-accordion__title">
+                    PIXI.Application
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-simple-plane">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-simple-plane">🔗</a>
+                <a id="pixi-simple-plane" class="pixi-accordion__title has-content">
+                    PIXI.SimplePlane
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.SimplePlane.html">https://pixijs.download/release/docs/PIXI.SimplePlane.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Simple Plane을 사용하면 여러 포인트에 걸쳐 텍스처를 그리며 이 포인트들을 조작할 수 있다.</div>
+                    <pre class="pixi-codeblock"><code>
+for (var i = 0; i < 20; i++) {
+    points.push(new PIXI.Point(i * 50, 0));
+};
+var SimplePlane = new PIXI.SimplePlane(PIXI.Texture.from("snake.png"), points);
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.SimplePlane (texture, verticesX,
+                            verticesY)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>texture</td>
+                            <td>PIXI.Textrue</td>
+                            <td>Container에서 Rendering할 수 있는 최대 Particle 수. 할당된 버퍼의 크기에 영향을 준다.</td>
+                        </tr>
+                        <tr>
+                            <td>verticesX</td>
+                            <td>number</td>
+                            <td>GPU에 업로드하여 적용해야하는 자식의 속성</td>
+                        </tr>
+                        <tr>
+                            <td>verticesY</td>
+                            <td>number</td>
+                            <td>true일 경우 정점이 업로드되고 적용된다. Sprite의 scale / anchor / trim / frame / orig가 동적이면 true로 설정한다.
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">textureUpdated ()</strong>
+                                <p class="pixi-list__text">텍스처 프레임이 변경되었을 때 오버라이드하게 사용되는 메서드.</p>
+                                <p class="pixi-list__text">평면에 근거한 메쉬는 그것을 덮어 쓰고 텍스처를 기반으로 보다 상세사항을 변경할 수 있다.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-loader">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-loader">🔗</a>
+                <a id="pixi-loader" class="pixi-accordion__title has-content">
+                    PIXI.Loader
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Loader.html">https://pixijs.download/release/docs/PIXI.Loader.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">PIXI.Loader 라이브러리는 데이터를 비동기식으로 로드하고 준비하기 쉽도록 제작되어있다.</div>
+                    <div class="pixi-desc--sentence">주로 데이터 로드를 위해 노출되는 다양한 API 브라우저를 통합하고 버전과 공급체간의 차이를 완화한다.</div>
+                    <div class="pixi-desc--sentence">PIXI.Loader의 목표는 리소스 캐싱 및 관리 시스템이 아니라 로더일 뿐이다.</div>
+                    <div class="pixi-desc--sentence">PIXI.Loader는 데이터를 로드하는 실제 메커니즘을 위한 것이다.</div>
+                    <div class="pixi-desc--sentence">모든 캐싱, 리소스 관리, 로드된 항목과 로드되지 않은 항목 파악, 로드할 항목 결정 등은 모두 PIXI.Loader
+                        외부에 논리로 존재해야 한다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Example</div>
+                    <pre class="pixi-codeblock"><code>
+// var loader = PIXI.Loader.shared; // PixiJS는 사용할 미리 만들어진 인스턴스를 제공한다.
+var loader = new PIXI.Loader(); // 또는 원하는 경우 직접 만들 수도 있다.
+var sprites = {};
+
+loader.add('bunny', '/content/images/bunny.png')
+    .add('spaceship', '/content/assets/spritesheet.json');
+loader.add('scoreFont', '/content/assets/score.fnt');
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.Loader (baseUrl, concurrency)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>baseUrl</td>
+                            <td>string</td>
+                            <td>''</td>
+                            <td>이 Loader에 의해 로드된 모든 리소스의 기본 URL.</td>
+                        </tr>
+                        <tr>
+                            <td>properties</td>
+                            <td>number</td>
+                            <td>10</td>
+                            <td>동시에 로드할 리소스의 수.</td>
+                        </tr>
+                    </table>
+                    <pre class="pixi-codeblock"><code>
+loader.add('bunny', '/content/images/bunny.png')
+    .add('spaceship', '/content/assets/spritesheet.json');
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">load (callback)</strong>
+                                <p class="pixi-list__text">대기 중인 리소스 로드를 시작한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>callback</td>
+                                <td>Loader.OnCompleteSignal</td>
+                                <td>complete 이벤트에 바인딩될 선택적 콜백.</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">pre (fn)</strong>
+                                <p class="pixi-list__text">리소스가 로드되기 전에 실행할 미들웨어 기능을 설정한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">use (fn)</strong>
+                                <p class="pixi-list__text">리소스가 로드된 후 실행할 미들웨어 기능을 설정한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>fn</td>
+                                <td>ILoaderMiddleware</td>
+                                <td>등록할 미들웨어 기능.</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">destroy ()</strong>
+                                <p class="pixi-list__text">로더를 파괴하고 참조를 제거한다.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-ticker">
+            <div class="pixi-accordion">
+                <a id="pixi-ticker" href="/example/basic/container#pixi-ticker" class="pixi-accordion__title">
+                    PIXI.Ticker
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+    </section>
+    <script src="/common/js/pixi.js"></script>
+    <script src="/common/js/pixi-spine.js"></script>
+    <script src="/common/js/common.js"></script>
+    <script src="./component.js"></script>
+</body>
+
+</html>

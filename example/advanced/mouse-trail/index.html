@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIXI Mouse Trail</title>
+
+    <link rel="stylesheet" href="/common/css/common.css">
+</head>
+
+<body>
+    <div class="pixi-navigation">
+        <div class="pixi-navigation__button-wrap">
+            <button type="button" class="pixi-navigation__button">
+                <div class="pixi-navigation__bar-wrap">
+                    <div class="pixi-navigation__bar bar1"></div>
+                    <div class="pixi-navigation__bar bar2"></div>
+                    <div class="pixi-navigation__bar bar3"></div>
+                    <div class="pixi-navigation__bar bar4"></div>
+                </div>
+            </button>
+        </div>
+        <div class="pixi-navigation__content">
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Basic</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="container">
+                        <a href="/example/basic/container">Container</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="particle-container">
+                        <a href="/example/basic/particle-container">Particle Container</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="tinting">
+                        <a href="/example/basic/tinting">Tinting</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="simple-plane">
+                        <a href="/example/basic/simple-plane">Simple Plane</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Advanced</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="slots">
+                        <a href="/example/advanced/slots">Slots</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="scratchcard">
+                        <a href="/example/advanced/scratchcard">Scratch Card</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="mouse-trail">
+                        <a href="/example/advanced/mouse-trail">Mouse Trail</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="starwarp">
+                        <a href="/example/advanced/starwarp">Star Warp</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Documents</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="total-document">
+                        <a href="/example/document/total-document">Documents</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pixi-navigation__logo">HJ</div>
+    </div>
+    <section class="pixi pixi-mouse-trail">
+        <div class="pixi-controller">
+            <div class="pixi-controller__title">
+                PIXI Mouse Trail
+            </div>
+            <hr>
+            <div class="pixi-controller__container">
+                <div class="pixi-controller__canvas">
+                    <canvas id="mouseTrail" width="800" height="800"></canvas>
+                </div>
+            </div>
+            <div class="pixi-title">Example Code</div>
+            <pre class="pixi-controller__codeblock"><code>
+;(function() {
+    'use strict';
+
+    window.pixi = window.pixi || {};
+    window.pixi.component = window.pixi.component || {};
+
+    pixi.component.mouseTrail = (function() {
+        var obj = {};
+
+        var init = function() {
+            obj.section = document.querySelector('.pixi-mouse-trail');
+
+            if (!!obj.section) {
+                setElements();
+                setHistoryArray();
+                setRopePoint();
+                setTicker();
+            }
+        };
+
+        var setElements = function() {
+            obj.app = new PIXI.Application({
+                view: document.getElementById('mouseTrail'),
+                backgroundColor: 0x1099bb
+            });
+
+            obj.trailTexture = PIXI.Texture.from('/content/images/trail.png');
+
+            // History
+            obj.historyX = [];
+            obj.historyY = [];
+            obj.historySize = 20;
+
+            obj.ropeSize = 100;
+            obj.points = [];
+            obj.rope = null;
+        };
+
+        var setHistoryArray = function() {
+            for (var i = 0; i < obj.historySize; i++) {
+                obj.historyX.push(0);
+                obj.historyY.push(0);
+            }
+        };
+
+        var setRopePoint = function() {
+            for (var i = 0; i < obj.ropeSize; i++) {
+                obj.points.push(new PIXI.Point(0, 0));
+            }
+            obj.rope = new PIXI.SimpleRope(obj.trailTexture, obj.points);
+            obj.rope.blendmode = PIXI.BLEND_MODES.ADD;
+            obj.app.stage.addChild(obj.rope);
+        };
+
+        var setTicker = function() {
+            obj.app.ticker.add(function() {
+                var mousePosition = obj.app.renderer.plugins.interaction.mouse.global;
+
+                obj.historyX.pop();
+                obj.historyX.unshift(mousePosition.x);
+                obj.historyY.pop();
+                obj.historyY.unshift(mousePosition.y);
+
+                for (var i = 0; i < obj.ropeSize; i++) {
+                    var point = obj.points[i];
+                    var interX = cubicInterPolation(obj.historyX, i / obj.ropeSize * obj.historySize);
+                    var interY = cubicInterPolation(obj.historyY, i / obj.ropeSize * obj.historySize);
+
+                    point.x = interX;
+                    point.y = interY;
+                }
+            });
+        };
+
+        var clipInput = function(k, array) {
+            if (k < 0) k = 0;
+            if (k > array.length - 1) k = array.length - 1;
+            return array[k];
+        };
+
+        var getTangent = function(k, factor, array) {
+            return factor * (clipInput(k + 1, array) - clipInput(k - 1, array)) / 2;
+        };
+
+        var cubicInterPolation = function(array, t, tangentFactor) {
+            if (tangentFactor == null) tangentFactor = 1;
+
+            var k = Math.floor(t);
+            var m = [getTangent(k, tangentFactor, array), getTangent(k + 1, tangentFactor, array)];
+            var p = [clipInput(k, array), clipInput(k + 1, array)];
+            t -= k;
+
+            var t2 = t * t;
+            var t3 = t * t2;
+            return (2 * t3 - 3 * t2 + 1) * p[0] + (t3 - 2 * t2 + t) * m[0] + (-2 * t3 + 3 * t2) * p[1] + (t3 - t2) * m[1];
+        };
+
+        return {
+            init: init
+        }
+    })();
+
+    pixi.component.mouseTrail.init();
+})();
+              </code></pre>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-display-object">
+            <div class="pixi-accordion">
+                <a id="pixi-display-object" href="/example/basic/container#pixi-display-object"
+                    class="pixi-accordion__title has-content">
+                    PIXI.DisplayObject
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-application">
+            <div class="pixi-accordion">
+                <a id="pixi-application" href="/example/basic/container#pixi-application"
+                    class="pixi-accordion__title">
+                    PIXI.Application
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-texture">
+            <div class="pixi-accordion">
+                <a id="pixi-texture" href="/example/basic/container#pixi-texture" class="pixi-accordion__title">
+                    PIXI.Texture
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-point">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-point">🔗</a>
+                <a id="pixi-point" class="pixi-accordion__title has-content">
+                    PIXI.Point
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Point.html">https://pixijs.download/release/docs/PIXI.Point.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Point 개체는 2차원 좌표계의 위치를 나타내며, 여기서 x는 가로 축의 위치를 나타내고 y는 세로축의 위치를
+                        나타낸다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong> new PIXI.Point (x, y)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>x</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>x축 위의 점 위치</td>
+                        </tr>
+                        <tr>
+                            <td>y</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>y축 위의 점 위치</td>
+                        </tr>
+                    </table>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">add (other, outPoint) : IPointData</strong>
+                                <p class="pixi-list__text">이 Point에 other를 추가하고 outPoint 또는 새 Point로 출력한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>other</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a href="/example/advanced/mouse-trail#pixi-ipoint">IPointData</a>
+                                    </span>
+                                </td>
+                                <td>이 Point에 추가할 다른 Point</td>
+                            </tr>
+                            <tr>
+                                <td>outPoint</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a href="/example/advanced/mouse-trail#pixi-ipoint">IPointData</a>
+                                    </span>
+                                </td>
+                                <td>값을 저장할 Point류 객체, 선택 사항(그렇지 않으면 새 Point가 생성됨).</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">clone () : PIXI.Point</strong>
+                                <p class="pixi-list__text">이 Point의 복제본을 만든다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">copyFrom (p) : this</strong>
+                                <p class="pixi-list__text">주어진 Point(p)에서 이 Point로 x와 y를 복사한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">copyTo (p) : T</strong>
+                                <p class="pixi-list__text">이 Point의 x와 y를 주어진 Point(p)에 복사한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>p</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a href="/example/advanced/mouse-trail#pixi-ipoint">IPointData</a>
+                                    </span>
+                                </td>
+                                <td>복사하거나 복사할 Point</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">dot (other) : number</strong>
+                                <p class="pixi-list__text">이 점과 다른 점의 내적을 계산한다. (내적 = 두 벡터의 해당 구성 요소의 곱의 합)</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>other</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a href="/example/advanced/mouse-trail#pixi-ipoint">IPointData</a>
+                                    </span>
+                                </td>
+                                <td>내적을 계산하는 다른 Point.</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">equals (p) : boolean</strong>
+                                <p class="pixi-list__text">다른 Point(p)을 받아들이고 주어진 Point가 이 Point와 같으면 true를 반환한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>p</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a href="/example/advanced/mouse-trail#pixi-ipoint">IPointData</a>
+                                    </span>
+                                </td>
+                                <td>확인할 Point.</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">set (p) : boolean</strong>
+                                <p class="pixi-list__text">Point를 새로운 x 및 y 위치로 설정한다. y를 생략하면 x와 y가 모두 x로 설정된다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x</td>
+                                <td>number</td>
+                                <td>0</td>
+                                <td>x축 위의 점 위치</td>
+                            </tr>
+                            <tr>
+                                <td>y</td>
+                                <td>number</td>
+                                <td>x</td>
+                                <td>y축 위의 점 위치</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-ipoint">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-ipoint">🔗</a>
+                <a id="pixi-ipoint" class="pixi-accordion__title has-content">
+                    PIXI.IPoint
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.IPoint.html">https://pixijs.download/release/docs/PIXI.IPoint.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Point 공통 인터페이스. Point와 Observable Point 모두 구현한다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>x</td>
+                            <td>number</td>
+                            <td>x 좌표</td>
+                        </tr>
+                        <tr>
+                            <td>y</td>
+                            <td>number</td>
+                            <td>y 좌표</td>
+                        </tr>
+                    </table>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">copyFrom (p) : this</strong>
+                                <p class="pixi-list__text">주어진 Point(p)에서 이 Point로 x와 y를 복사한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">copyTo (p) : T</strong>
+                                <p class="pixi-list__text">이 Point의 x와 y를 주어진 Point(p)에 복사한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>p</td>
+                                <td>IPointData</td>
+                                <td>복사하거나 복사할 Point</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">equals (p) : boolean</strong>
+                                <p class="pixi-list__text">다른 Point(p)을 받아들이고 주어진 Point가 이 Point와 같으면 true를 반환한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>p</td>
+                                <td>IPointData</td>
+                                <td>확인할 Point.</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">set (p) : boolean</strong>
+                                <p class="pixi-list__text">Point를 새로운 x 및 y 위치로 설정한다. y를 생략하면 x와 y가 모두 x로 설정된다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x</td>
+                                <td>number</td>
+                                <td>0</td>
+                                <td>x축 위의 점 위치</td>
+                            </tr>
+                            <tr>
+                                <td>y</td>
+                                <td>number</td>
+                                <td>x</td>
+                                <td>y축 위의 점 위치</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-simple-rope">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-simple-rope">🔗</a>
+                <a id="pixi-simple-rope" class="pixi-accordion__title has-content">
+                    PIXI.SimpleRope
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.SimpleRope.html">https://pixijs.download/release/docs/PIXI.SimpleRope.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Rope를 사용하면 여러 Point에 걸쳐 Texture를 그려 이들 Point를 조작할 수 있다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Example</div>
+                    <pre class="pixi-codeblock"><code>
+for (var i = 0; i < 20; i++) {
+    points.push(new PIXI.Point(i * 50, 0));
+}
+var rope = new PIXI.SimpleRope(PIXI.Texture.from("snake.png"), points);
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.SimpleRope (texture, points,
+                            textureScale)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>texture</td>
+                            <td>
+                                <span class="pixi-link">
+                                    <a href="/example/basic/container#pixi-texture">PIXI.Texture</a>
+                                </span>
+                            </td>
+                            <td></td>
+                            <td>Rope에 사용할 Texture</td>
+                        </tr>
+                        <tr>
+                            <td>points</td>
+                            <td>IPoint[]</td>
+                            <td></td>
+                            <td>이 Rope를 구성하기 위한 PIXI.Point 객체의 배열.</td>
+                        </tr>
+                        <tr>
+                            <td>textureScale</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>(선택 사항) 양수 값은 가로 세로 비율을 유지하면서 Rope Texture의 크기를 조정한다. 여기에서 더 큰 Texture와 다운샘플링을 제공하여 알파
+                                채널 아티팩트를 줄일 수 있다. 0으로 설정하면 텍스처가 대신 늘어난다.</td>
+                        </tr>
+                    </table>
+                    <div class="pixi-subtitle">Members</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">autoUpdate : boolean</strong>
+                                <p class="pixi-list__text">각 Frame마다 Rope 포인트로 정점을 다시 계산한다.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </section>
+    <script src="/common/js/pixi.js"></script>
+    <script src="/common/js/pixi-spine.js"></script>
+    <script src="/common/js/common.js"></script>
+    <script src="./component.js"></script>
+</body>
+
+</html>
