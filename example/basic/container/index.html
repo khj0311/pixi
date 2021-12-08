@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIXI Container</title>
+
+    <link rel="stylesheet" href="/common/css/common.css">
+</head>
+
+<body>
+    <section class="pixi pixi-container">
+        <div class="pixi-controller">
+            <div class="pixi-controller__title">
+                PIXI Container Controller
+            </div>
+            <hr>
+            <div class="pixi-controller__container">
+                <div class="pixi-controller__control">
+                    <div class="pixi-controller__control-wrap">
+                        <div class="pixi-subtitle">PIXI.Sprite</div>
+                        <div class="pixi-controller__control-form">
+                            <div>
+                                <button class="pixi-controller__control-button" id="addSprite" type="button">Add
+                                    Sprite</button>
+                                <button class="pixi-controller__control-button" id="removeSprite" type="button">Remove
+                                    Sprite</button>
+                            </div>
+                            <div>
+                                <input id="startIndex" type="text" placeholder="beginIndex" />
+                                <input id="endIndex" type="text" placeholder="endIndex" />
+                            </div>
+                            <div>
+                                <button class="pixi-controller__control-button" id="removeSomeSprite"
+                                    type="button">Remove Some Sprite</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pixi-controller__control-wrap">
+                        <div class="pixi-subtitle">PIXI.Ticker</div>
+                        <div class="pixi-controller__control-form">
+                            <div>
+                                <button class="pixi-controller__control-button" id="addTicker" type="button">Add
+                                    Ticker</button>
+                                <button class="pixi-controller__control-button" id="removeTicker" type="button">Remove
+                                    Ticker</button>
+                            </div>
+                            <div>
+                                <button class="pixi-controller__control-button" id="startTicker" type="button">Start
+                                    Ticker</button>
+                                <button class="pixi-controller__control-button" id="stopTicker" type="button">Stop
+                                    Ticker</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pixi-controller__canvas">
+                    <canvas id="container" width="800" height="800"></canvas>
+                </div>
+            </div>
+            <div class="pixi-title">Example Code</div>
+            <pre class="pixi-controller__codeblock"><code>
+;(function() {
+    'use strict';
+
+    window.pixi = window.pixi || {};
+    window.pixi.component = window.pixi.component || {};
+
+    pixi.component.container = (function() {
+        var obj = {};
+
+        var init = function() {
+            obj.section = document.querySelector('.pixi-container');
+
+            if (!!obj.section) {
+                setElements();
+                setSprite();
+                setContainer();
+                bindEvents();
+            }
+        };
+
+        var setElements = function() {
+            obj.containerApp = new PIXI.Application({
+                view: document.getElementById('container'),
+                width: 800,
+                height: 800,
+                backgroundColor: 0xa0f584,
+                resolution: window.devicePixelRatio || 1
+            });
+
+            obj.container = new PIXI.Container();
+            obj.containerApp.stage.addChild(obj.container);
+            obj.texture = PIXI.Texture.from('/content/images/bunny.png');
+
+            // Sprite
+            obj.addSprite = obj.section.querySelector('#addSprite');
+            obj.removeSprite = obj.section.querySelector('#removeSprite');
+            obj.removeSomeSprite = obj.section.querySelector('#removeSomeSprite');
+
+            // Ticker
+            obj.addTicker = obj.section.querySelector('#addTicker');
+            obj.removeTicker = obj.section.querySelector('#removeTicker');
+            obj.startTicker = obj.section.querySelector('#startTicker');
+            obj.stopTicker = obj.section.querySelector('#stopTicker');
+        };
+
+        var setSprite = function() {
+            for (var i = 0; i < 25; i++) {
+                var bunny = new PIXI.Sprite(obj.texture);
+                bunny.anchor.set(0.5);
+                bunny.scale.set(2);
+                bunny.x = (i % 5) * 100;
+                bunny.y = Math.floor(i / 5) * 100;
+                obj.container.addChild(bunny);
+            }
+        };
+
+        var setContainer = function() {
+            obj.container.x = obj.containerApp.screen.width / 2;
+            obj.container.y = obj.containerApp.screen.height / 2;
+
+            obj.container.pivot.x = obj.container.width / 2;
+            obj.container.pivot.y = obj.container.height / 2;
+        };
+
+        var bindEvents = function() {
+            obj.container.on('childAdded', function(child, cont, index) {
+                console.log(child);
+                console.log(cont);
+                console.log(index);
+            });
+
+            if (obj.addSprite) obj.addSprite.addEventListener('click', onClickAddSprite);
+            if (obj.removeSprite) obj.removeSprite.addEventListener('click', onClickRemoveSprite);
+            if (obj.removeSomeSprite) obj.removeSomeSprite.addEventListener('click', onClickRemoveSomeSprite);
+
+            if (obj.addTicker) obj.addTicker.addEventListener('click', onClickAddTicker);
+            if (obj.removeTicker) obj.removeTicker.addEventListener('click', onClickRemoveTicker);
+            if (obj.startTicker) obj.startTicker.addEventListener('click', onClickStartTicker);
+            if (obj.stopTicker) obj.stopTicker.addEventListener('click', onClickStopTicker);
+        };
+
+        var onClickAddSprite = function() {
+            var leng = obj.container.children.length;
+            var bunny = new PIXI.Sprite(obj.texture);
+            bunny.anchor.set(0.5);
+            bunny.scale.set(2);
+            bunny.x = (leng % 5) * 100;
+            bunny.y = Math.floor(leng / 5) * 100;
+            obj.container.addChild(bunny);
+        };
+
+        var onClickRemoveSprite = function() {
+            var child = obj.container.children;
+            var leng = obj.container.children.length - 1;
+            obj.container.removeChild(child[leng]);
+        };
+
+        var onClickRemoveSomeSprite = function() {
+            var startIndex = document.querySelector('#startIndex').value;
+            var endIndex = document.querySelector('#endIndex').value;
+            startIndex = !!startIndex ? startIndex : 0;
+            endIndex = !!endIndex ? endIndex : obj.container.children.length;
+
+            obj.container.removeChildren(startIndex, endIndex);
+        };
+
+        var tickerAnimation = function(delta) {
+            obj.container.rotation -= 0.01 * delta;
+        };
+
+        var onClickAddTicker = function() {
+            obj.containerApp.ticker.add(tickerAnimation);
+        };
+
+        var onClickRemoveTicker = function() {
+            obj.containerApp.ticker.remove(tickerAnimation);
+        };
+
+        var onClickStartTicker = function() {
+            obj.containerApp.ticker.start();
+        };
+
+        var onClickStopTicker = function() {
+            obj.containerApp.ticker.stop();
+        };
+
+        return {
+            init: init
+        }
+    })();
+
+    pixi.component.container.init();
+})();
+                </code></pre>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-display-object">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-display-object">🔗</a>
+                <a id="pixi-display-object" class="pixi-accordion__title has-content">
+                    PIXI.DisplayObject
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.DisplayObject.html">https://pixijs.download/release/docs/PIXI.DisplayObject.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">화면에 Rendering되는 모든 개체의 기본 Class.</div>
+                    <div class="pixi-desc--sentence">이것은 추상 Class이며 자체적으로 사용할 수 없다.</div>
+                    <br>
+                    <div class="pixi-subtitle">PixiJS에서 구현된 디스플레이 객체</div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>Display Object</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>PIXI.Container</td>
+                            <td>DisplayObject를 추가할 수 있는 컨테이너 객체</td>
+                        </tr>
+                        <tr>
+                            <td>PIXI.Graphics</td>
+                            <td>Canvas API와 유사한 모양 그리기 표시 객체</td>
+                        </tr>
+                        <tr>
+                            <td>PIXI.Sprite</td>
+                            <td>텍스처(이미지)를 그림</td>
+                        </tr>
+                        <tr>
+                            <td>PIXI.Text</td>
+                            <td>내부적으로 Canvas API를 사용하여 텍스트를 그린다.</td>
+                        </tr>
+                        <tr>
+                            <td>PIXI.TilingSprite</td>
+                            <td>타일 방식으로 Texture/Image를 그린다.</td>
+                        </tr>
+                        <tr>
+                            <td>PIXI.AnimatedSprite</td>
+                            <td>여러 이미지의 애니메이션을 그린다.</td>
+                        </tr>
+                        <tr>
+                            <td>PIXI.Mesh</td>
+                            <td>사용자 지정 데이터로 Mesh를 그리기 위한 하위 수준 API 제공</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Transforms</div>
+                    <div class="pixi-desc--sentence">디스플레이 객체의 Transform은 로컬 좌표공간에서 부모 좌표공간으로의 투영을 기술한다.</div>
+                    <div class="pixi-desc--sentence">다음 속성은 Transform에서 얻는다.</div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>Property</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>pivot</td>
+                            <td>rotation, scaling 및 skew 아래 변경 불가하다. pivot의 부모 공간에 대한 투영은 다른 세 가지 변환과 관계없이 위치와 동일하다. 즉,
+                                rotation, scaling 및 skew의 중심이다.</td>
+                        </tr>
+                        <tr>
+                            <td>position</td>
+                            <td>부모 로컬공간의 pivot 위치이다. pivot의 기본값은 origin(0,0)이다. 디스플레이 객체의 좌측 상단 모서리가 로컬공간에 있는 경우, 그 위치는
+                                부모의 로컬공간에 있는 좌측 상단 모서리가 된다.</td>
+                        </tr>
+                        <tr>
+                            <td>scale</td>
+                            <td>디스플레이 개체의 투영이 늘어나거나 압축된다. 스케일 팩터는 로컬 좌표 축을 따라 있다. 즉, 디스플레이 표시 객체는 회전하거나 치우치기 전에 축척이
+                                조정된다. 스케일링의 중심은 pivot이다.</td>
+                        </tr>
+                        <tr>
+                            <td>rotation</td>
+                            <td>디스플레이 표시 객체의 투영이 이 각도(radian 단위)로 회전한다.</td>
+                        </tr>
+                        <tr>
+                            <td>angle</td>
+                            <td>각도 단위로 된 회전 별칭.</td>
+                        </tr>
+                        <tr>
+                            <td>skew</td>
+                            <td>직사각형 디스플레이 표시 객체를 평행사변형으로 변형하는 데 사용할 수 있다.</td>
+                        </tr>
+                        <tr>
+                            <td>x</td>
+                            <td>x 좌표</td>
+                        </tr>
+                        <tr>
+                            <td>y</td>
+                            <td>y 좌표</td>
+                        </tr>
+                        <tr>
+                            <td>width</td>
+                            <td>Container에 구현된다. width 속성은 요청된 너비를 로컬공간 상자 너비로 나누어 scale.x를 계산한다. scale.x에 대한 간접적인 추상화이며
+                                사용자 정의 너비에 대한 개념은 없다.</td>
+                        </tr>
+                        <tr>
+                            <td>height</td>
+                            <td>Container에 구현된다. height 속성은 요청된 높이를 로컬공간 상자 높이로 나누어 scale.y를 계산한다. scale.y에 대한 간접적인
+                                추상화이며 사용자 정의 높이에 대한 개념은 없다.</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-application">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-application">🔗</a>
+                <a id="pixi-application" class="pixi-accordion__title has-content">
+                    PIXI.Application
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Application.html">https://pixijs.download/release/docs/PIXI.Application.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">새로운 PIXI 애플리케이션을 생성하기 위한 편의 클래스이며, Renderer, Ticker 및 루트 컨테이너를 자동으로
+                        생성한다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Example</div>
+                    <pre class="pixi-codeblock"><code>
+// Application 생성
+const app = new PIXI.Application();
+
+// DOM에 view 추가
+document.body.appendChild(app.view);
+
+// 예시) 표시할 스프라이트 객체 추가
+app.stage.addChild(PIXI.Sprite.from('something.png'));
+                    </code></pre>
+                    <pre class="pixi-codeblock"><code>
+var app = new PIXI.Application({
+    view: document.getElementById('container'),
+    width: 800,
+    height: 800,
+    backgroundColor: 0xa0f584,
+    resolution: window.devicePixelRatio || 1
+});
+                    </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.Application (options)</strong></div>
+                    <div class="pixi-desc">
+
+                    </div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>options</td>
+                            <td>object</td>
+                            <td></td>
+                            <td>선택적 Renderer 매개변수</td>
+                        </tr>
+                        <tr>
+                            <td>options.width</td>
+                            <td>number</td>
+                            <td>800</td>
+                            <td>Renderer View의 너비 지정</td>
+                        </tr>
+                        <tr>
+                            <td>options.height</td>
+                            <td>number</td>
+                            <td>600</td>
+                            <td>Renderer View의 높이 지정</td>
+                        </tr>
+                        <tr>
+                            <td>options.view</td>
+                            <td>HTMLCanvasElement</td>
+                            <td></td>
+                            <td>Renderer View로 사용할 캔버스 엘리먼트</td>
+                        </tr>
+                        <tr>
+                            <td>options.backgroundColor</td>
+                            <td>number</td>
+                            <td>0x000000</td>
+                            <td>Rendering 된 영역의 배경 색상 지정</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Members</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">stage
+                                    <span class="pixi-link">
+                                        <a href="#pixi-container">(PIXI.Container)</a>
+                                    </span>
+                                </strong>
+                                <p class="pixi-list__text">렌더링 되는 루트 디스플레이 컨테이너</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-container">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-container">🔗</a>
+                <a id="pixi-container" class="pixi-accordion__title has-content">
+                    PIXI.Container
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Container.html">https://pixijs.download/release/docs/PIXI.Container.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Container는 child를 포함하는 범용 표시 객체이며, Masking 및 Filtering과 같은 고급
+                        Rendering 기능에 대한 기본 기능을 제공한다.</div>
+                    <div class="pixi-desc--sentence">또한, Graphics 및 Sprite를 비롯한 다른 객체의 컨테이너 역할을 하는 모든 표시 객체의 기본 Class
+                        이다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Example</div>
+                    <pre class="pixi-codeblock"><code>
+        var app = new PIXI.Application({
+            view: document.getElementById('container'),
+            width: 800,
+            height: 800,
+            backgroundColor: 0xa0f584,
+            resolution: window.devicePixelRatio || 1
+        });
+        
+        var container = new PIXI.Container();
+        
+        app.stage.addChild(container);
+        
+        var texture = PIXI.Texture.from('/content/images/bunny.png');
+        
+        for (var i = 0; i < 25; i++) {
+            var bunny = new PIXI.Sprite(texture);
+            bunny.anchor.set(0.5);
+            bunny.scale.set(2);
+            bunny.x = (i % 5) * 100;
+            bunny.y = Math.floor(i / 5) * 100;
+            container.addChild(bunny);
+        }
+                    </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">addChild (...children)</strong>
+                                <p class="pixi-list__text">컨테이너에 하나 이상의 자식을 추가한다.</p>
+                                <p class="pixi-list__text">다음과 같이 여러 항목을 추가할 수 있다. myContainer.addChild(thingOne,
+                                    thingTwo, thingThree)</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">removeChild (...children)</strong>
+                                <p class="pixi-list__text">컨테이너에 하나 이상의 자식을 제거한다.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>children</td>
+                            <td>
+                                <span class="pixi-link">
+                                    <a href="#pixi-display-object">PIXI.DisplayObject</a>
+                                </span>
+                            </td>
+                            <td>컨테이너에 추가할 DisplayObject(들)</td>
+                        </tr>
+                    </table>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">removeChildren (beginIndex, endIndex)</strong>
+                                <p class="pixi-list__text">시작 및 끝 인덱스 내에 있는 이 컨테이너에서 모든 자식을 제거한다.</p>
+                                <p class="pixi-list__text">(중간의 일부를 제거할 수는 없다.)</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>beginIndex</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>시작 인덱스</td>
+                        </tr>
+                        <tr>
+                            <td>endIndex</td>
+                            <td>number</td>
+                            <td>this.children.length</td>
+                            <td>끝 인덱스, 기본 값은 컨테이너의 크기</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Events</div>
+                    <pre class="pixi-codeblock"><code>
+        container.on('childAdded', function(child, cont, index) {
+            console.log(child);
+            console.log(cont);
+            console.log(index);
+        });
+                    </code></pre>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>child</td>
+                            <td>PIXI.DisplayObject</td>
+                            <td>컨테이너에 추가된 자식</td>
+                        </tr>
+                        <tr>
+                            <td>container</td>
+                            <td>PIXI.Container</td>
+                            <td>자식이 추가된 컨테이너</td>
+                        </tr>
+                        <tr>
+                            <td>index</td>
+                            <td>number</td>
+                            <td>마지막으로 추가된 자식의 인덱스</td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-texture">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-texture">🔗</a>
+                <a id="pixi-texture" class="pixi-accordion__title has-content">
+                    PIXI.Texture
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Texture.html">https://pixijs.download/release/docs/PIXI.Texture.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Texture는 이미지 또는 이미지의 일부를 나타내는 정보를 저장한다.</div>
+                    <div class="pixi-desc--sentence">Display List에 직접 추가할 수 없으며 Sprite의 Texture로 사용해야 한다.</div>
+                    <div class="pixi-desc--sentence">Texture에 프레임이 제공되지 않으면 전체 이미지가 사용된다.</div>
+                    <div class="pixi-desc--sentence">　</div>
+                    <div class="pixi-desc--sentence">이미지에서 직접 Texture를 만든 다음 다음과 같이 여러 번 재사용할 수 있다.</div>
+                    <pre class="pixi-codeblock"><code>
+            var texture = PIXI.Texture.from('/content/images/bunny.png');
+            var bunny1 = new PIXI.Sprite(texture);
+            var bunny2 = new PIXI.Sprite(texture);
+                        </code></pre>
+                    <div class="pixi-desc--sentence">텍스처 프레임을 생성자에 전달하지 않으면 noFrame 모드가 활성화된다.</div>
+                    <div class="pixi-desc--sentence">baseTexture 이벤트를 구독하고 baseTexture와 동시에 자동으로 크기가 조정된다.</div>
+                    <div class="pixi-desc--sentence">　</div>
+                    <div class="pixi-desc--sentence">로드 여부와 관계없이 SVG로 만든 텍스처는 파일 처리가 완료되기 전에 사용할 수 없다.</div>
+                    <div class="pixi-desc--sentence">PIXI.Sprite의 _textureID 속성을 확인하여 이를 확인할 수 있다.</div>
+                    <pre class="pixi-codeblock"><code>
+            var texture = PIXI.Texture.from('assets/image.svg');
+            var sprite1 = new PIXI.Sprite(texture);
+            //sprite1._textureID
+                        </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.Texture (baseTexture, frame, orig, trim, rotate,
+                            anchor)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>baseTexture</td>
+                            <td>PIXI.BaseTexture</td>
+                            <td>Texture를 생성 할 기본 Texture source</td>
+                        </tr>
+                        <tr>
+                            <td>frame</td>
+                            <td>PIXI.Rectangle</td>
+                            <td>표시할 Texture의 사각 프레임</td>
+                        </tr>
+                        <tr>
+                            <td>orig</td>
+                            <td>PIXI.Rectangle</td>
+                            <td>기본 Texture 영역</td>
+                        </tr>
+                        <tr>
+                            <td>trim</td>
+                            <td>PIXI.Rectangle</td>
+                            <td>기본 Texture의 트리밍 된 사각형</td>
+                        </tr>
+                        <tr>
+                            <td>rotate</td>
+                            <td>number</td>
+                            <td>Texture packer가 Texture를 회전할 각도를 표시</td>
+                        </tr>
+                        <tr>
+                            <td>anchor</td>
+                            <td>
+                                <span class="pixi-link">
+                                    <a href="/components/preview/mouse-trail#pixi-ipoint">PIXI.IPointData</a>
+                                </span>
+                            </td>
+                            <td>Sprite 배치/회전에 사용되는 기본 앵커 포인트</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">PIXI.Texture.from (source, options, strict)</strong>
+                                <p class="pixi-list__text">제공한 소스를 기반으로 새 Texture를 생성하는 도우미 함수.</p>
+                                <p class="pixi-list__text">source는 프레임 ID, 이미지 URL, 비디오 URL, 캔버스 요소, 비디오 요소, 기본 텍스처일 수
+                                    있다.</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>source</td>
+                            <td>string | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | PIXI.BaseTexture</td>
+                            <td>Texture를 생성할 source</td>
+                        </tr>
+                        <tr>
+                            <td>options</td>
+                            <td>object</td>
+                            <td>
+                                <span class="pixi-link">
+                                    <a
+                                        href="https://pixijs.download/release/docs/PIXI.BaseTexture.html">PIXI.BaseTexture</a>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>strict</td>
+                            <td>number</td>
+                            <td>strict mode 적용</td>
+                        </tr>
+                    </table>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">clone ()</strong>
+                                <p class="pixi-list__text">해당 Texture와 같은 역할을 하는 새로운 Texture 개체를 만든다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">destroy ()</strong>
+                                <p class="pixi-list__text">해당 Texture를 파괴한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">update ()</strong>
+                                <p class="pixi-list__text">GPU에서 해당 Texture를 업데이트한다.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-sprite">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-sprite">🔗</a>
+                <a id="pixi-sprite" class="pixi-accordion__title has-content">
+                    PIXI.Sprite
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Sprite.html">https://pixijs.download/release/docs/PIXI.Sprite.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Sprite 개체는 화면에 렌더링되는 모든 Texture 개체의 기반이다.</div>
+                    <div class="pixi-desc--sentence">다음과 같이 이미지에서 직접 Sprite를 만들 수 있다.</div>
+                    <pre class="pixi-codeblock"><code>
+        var sprite = PIXI.Sprite.from('assets/image.png');
+                    </code></pre>
+                    <div class="pixi-desc--sentence">스프라이트를 생성하는 더 효율적인 방법은 PIXI.Spritesheet를 사용하는 것이다.</div>
+                    <div class="pixi-desc--sentence">화면에 렌더링할 때 기본 Texture를 바꾸는 것이 비효율적이기 때문이다.</div>
+                    <pre class="pixi-codeblock"><code>
+        PIXI.Loader.shared.add("assets/spritesheet.json").load(setup);
+        
+        function setup() {
+            var sheet = PIXI.Loader.shared.resources["assets/spritesheet.json"].spritesheet;
+            var sprite = new PIXI.Sprite(sheet.textures["image.png"]);
+            ...
+        }
+                    </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.Sprite (texture)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>texture</td>
+                            <td>PIXI.Texture</td>
+                            <td>Sprite에 대한 Texture</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">PIXI.Sprite.from (source, options)</strong>
+                                <p class="pixi-list__text">제공한 소스를 기반으로 새 Sprite를 생성하는 도우미 함수.</p>
+                                <p class="pixi-list__text">source는 프레임 ID, 이미지 URL, 비디오 URL, 캔버스 요소, 비디오 요소, 기본 텍스처일 수
+                                    있다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>source</td>
+                                <td>string | HTMLImageElement | HTMLCanvasElement | HTMLVideoElement | PIXI.BaseTexture
+                                </td>
+                                <td>Texture를 생성할 source</td>
+                            </tr>
+                            <tr>
+                                <td>options</td>
+                                <td>object</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a
+                                            href="https://pixijs.download/release/docs/PIXI.BaseTexture.html">PIXI.BaseTexture</a>
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">containsPoint (point)</strong>
+                                <p class="pixi-list__text">확인할 point가 스프라이트 내부에 있는지 테스트하는 메서드.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>point</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a href="/components/preview/mouse-trail#pixi-ipoint">IPointData</a>
+                                    </span>
+                                </td>
+                                <td>테스트 포인트 (x, y)</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">destroy ()</strong>
+                                <p class="pixi-list__text">이 Sprite와 선택적으로 Texture와 자식을 파괴하는 메서드.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>options</td>
+                                <td>IDestroyOptions | boolean</td>
+                                <td></td>
+                                <td>옵션 매개변수. true 일 경우 모든 옵션이 해당 값으로 설정된 것처럼 작동</td>
+                            </tr>
+                            <tr>
+                                <td>options.children</td>
+                                <td></td>
+                                <td>false</td>
+                                <td>true일 경우 모든 자식의 destroy 메소드를 호출</td>
+                            </tr>
+                            <tr>
+                                <td>options.texture</td>
+                                <td></td>
+                                <td>false</td>
+                                <td>Sprite의 Texture도 파괴</td>
+                            </tr>
+                            <tr>
+                                <td>options.baseTexture</td>
+                                <td></td>
+                                <td>false</td>
+                                <td>Sprite의 기본 Texture도 파괴</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-ticker">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-ticker">🔗</a>
+                <a id="pixi-ticker" class="pixi-accordion__title has-content">
+                    PIXI.Ticker
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Ticker.html">https://pixijs.download/release/docs/PIXI.Ticker.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">다른 개체가 수신하는 업데이트 루프를 실행하는 Ticker 클래스.</div>
+                    <div class="pixi-desc--sentence">이 클래스는 요청된 애니메이션 프레임에서 실행하기 위한 리스너를 중심으로 구성된다.</div>
+                    <div class="pixi-desc--sentence">Ticker가 시작되고 Emitter에 리스너가 있는 경우 애니메이션 프레임은 필요할 때만 요청된다.</div>
+                    <pre class="pixi-codeblock"><code>
+        app.ticker.add(function(delta) {
+        container.rotation -= 0.01 * delta;
+        });
+                    </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">add (fn, context, priority)</strong>
+                                <p class="pixi-list__text">Tick 이벤트에 대한 Handler를 추가한다.</p>
+                                <p class="pixi-list__text">제거되거나 Ticker가 중지되지 않는 한 계속해서 호출한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">addOnce (fn, context, priority)</strong>
+                                <p class="pixi-list__text">한 번만 실행되는 Tick 이벤트에 대한 Handler를 추가한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">remove (fn, context)</strong>
+                                <p class="pixi-list__text">함수 및 context 매개변수와 일치하는 모든 Handler를 제거한다.</p>
+                                <p class="pixi-list__text">제거한 후 Handler가 남지 않으면 애니메이션 프레임이 취소된다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>fn</td>
+                                <td>TickerCallback</td>
+                                <td></td>
+                                <td>한 번의 업데이트에 추가/삭제 될 Ticker Listener 기능</td>
+                            </tr>
+                            <tr>
+                                <td>context</td>
+                                <td>T</td>
+                                <td></td>
+                                <td>Listener 컨텍스트</td>
+                            </tr>
+                            <tr>
+                                <td>priority</td>
+                                <td>number</td>
+                                <td>PIXI.UPDATE_PRIORITY.NORMAL</td>
+                                <td>실행 순서 우선순위</td>
+                            </tr>
+                        </table>
+                        <pre class="pixi-codeblock"><code>
+        var tickerAnim = function(delta) {
+        container.rotation -= 0.01 * delta;
+        };
+        
+        var addTickerFunc = function() {
+        app.ticker.add(tickerAnim);
+        };
+        
+        var removeTickerFunc = function() {
+        app.ticker.remove(tickerAnim);
+        };
+        
+        var addTicker = document.querySelector('#addTicker');
+        if (addTicker) addTicker.addEventListener('click', addTickerFunc);
+        
+        var removeTicker = document.querySelector('#removeTicker');
+        if (removeTicker) removeTicker.addEventListener('click', removeTickerFunc);
+                        </code></pre>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">destroy ()</strong>
+                                <p class="pixi-list__text">이 메서드를 호출하면 내부 이벤트에 대한 모든 참조가 제거된다.</p>
+                                <p class="pixi-list__text">Ticker를 파괴하고 이후에는 사용하지 말아야 한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">start ()</strong>
+                                <p class="pixi-list__text">Ticker를 시작한다.</p>
+                                <p class="pixi-list__text">Ticker에 리스너가 있는 경우 이 시점(처음 시작 또는 정지되어있던 프레임)에서 새 애니메이션 프레임이
+                                    요청된다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">stop ()</strong>
+                                <p class="pixi-list__text">Ticker를 중지한다.</p>
+                                <p class="pixi-list__text">Ticker가 애니메이션 프레임을 요청한 경우 이 시점에서 취소된다.</p>
+                            </li>
+                        </ul>
+                        <pre class="pixi-codeblock"><code>
+        var startTicker = document.querySelector('#startTicker');
+        if (startTicker) {
+        startTicker.addEventListener('click', function() {
+            app.ticker.start();
+        });
+        }
+        
+        var stopTicker = document.querySelector('#stopTicker');
+        if (stopTicker) {
+        stopTicker.addEventListener('click', function() {
+            app.ticker.stop();
+        });
+        }
+                        </code></pre>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </section>
+    <script src="/common/js/pixi.js"></script>
+    <script src="/common/js/pixi-spine.js"></script>
+    <script src="/common/js/common.js"></script>
+    <script src="./container.js"></script>
+</body>
+
+</html>
