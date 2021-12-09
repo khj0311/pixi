@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PIXI Scratch Card</title>
+    <title>PIXI Graphics - Simple</title>
 
     <link rel="stylesheet" href="/common/css/common.css">
 </head>
@@ -134,15 +134,15 @@
         <div class="pixi-navigation__logo">HJ</div>
     </div>
     <div class="pixi-navigation__dim"></div>
-    <section class="pixi pixi-scratchcard">
+    <section class="pixi pixi-graphics-simple">
         <div class="pixi-controller">
             <div class="pixi-controller__title">
-                PIXI Scratch Card
+                PIXI Graphics - Simple
             </div>
             <hr>
             <div class="pixi-controller__container">
                 <div class="pixi-controller__canvas">
-                    <canvas id="scratchcard" width="800" height="800"></canvas>
+                    <canvas id="graphicsSimple" width="800" height="800"></canvas>
                 </div>
             </div>
             <div class="pixi-title">Example Code</div>
@@ -153,83 +153,104 @@
     window.pixi = window.pixi || {};
     window.pixi.component = window.pixi.component || {};
 
-    pixi.component.scratchcard = (function() {
+    pixi.component.graphicsSimple = (function() {
         var obj = {};
 
         var init = function() {
-            obj.section = document.querySelector('.pixi-scratchcard');
+            obj.section = document.querySelector('.pixi-graphics-simple');
 
             if (!!obj.section) {
                 setElements();
-                setBrush();
-                setLoader();
-                bindEvents();
+                drawGraphics();
             }
         };
 
         var setElements = function() {
             obj.app = new PIXI.Application({
-                view: document.getElementById('scratchcard')
+                view: document.getElementById('graphicsSimple'),
+                antialias: true
             });
 
-            obj.dragging = false;
-            obj.renderTexture = null;
-            obj.renderTextureSprite = null;
+            obj.graphics = new PIXI.Graphics();
         };
 
-        var setBrush = function() {
-            obj.brush = new PIXI.Graphics();
-            obj.brush.beginFill(0xffffff);
-            obj.brush.drawCircle(0, 0, 50);
-            obj.brush.endFill();
-        };
+        var drawGraphics = function() {
+            obj.graphics.beginFill(0xDE3249);
+            obj.graphics.drawRect(50, 50, 100, 100);
+            obj.graphics.endFill();
 
-        var setLoader = function() {
-            obj.app.loader.add('bg1', '/content/images/bg_crayon1.jpg');
-            obj.app.loader.add('bg2', '/content/images/bg_crayon2.jpg');
-            obj.app.loader.load(setScratchCard);
-        };
+            obj.graphics.lineStyle(2, 0xFEEB77, 1);
+            obj.graphics.beginFill(0x650A5A);
+            obj.graphics.drawRect(200, 50, 100, 100);
+            obj.graphics.endFill();
 
-        var setScratchCard = function(loader, resources) {
-            var background = new PIXI.Sprite(resources.bg1.texture);
-            obj.app.stage.addChild(background);
-            background.width = obj.app.screen.width;
-            background.height = obj.app.screen.height;
+            obj.graphics.lineStyle(10, 0xFFBD01, 1);
+            obj.graphics.beginFill(0xC34288);
+            obj.graphics.drawRect(350, 50, 100, 100);
+            obj.graphics.endFill();
 
-            var imageToReveal = new PIXI.Sprite(resources.bg2.texture);
-            obj.app.stage.addChild(imageToReveal);
-            imageToReveal.width = obj.app.screen.width;
-            imageToReveal.height = obj.app.screen.height;
+            obj.graphics.lineStyle(2, 0xFFFFFF, 1);
+            obj.graphics.beginFill(0xAA4F08);
+            obj.graphics.drawRect(530, 50, 140, 100);
+            obj.graphics.endFill();
 
-            obj.renderTexture = PIXI.RenderTexture.create(obj.app.screen.width, obj.app.screen.height);
-            obj.renderTextureSprite = new PIXI.Sprite(obj.renderTexture);
-            obj.app.stage.addChild(obj.renderTextureSprite);
-            imageToReveal.mask = obj.renderTextureSprite;
+            obj.graphics.lineStyle(0);
+            obj.graphics.beginFill(0xDE3249, 1);
+            obj.graphics.drawCircle(100, 250, 50);
+            obj.graphics.endFill();
 
-            obj.app.stage.interactive = true;
-            obj.app.stage.on('pointerdown', pointerDown);
-            obj.app.stage.on('pointerup', pointerUp);
-            obj.app.stage.on('pointermove', pointerMove);
-        };
+            obj.graphics.lineStyle(2, 0xFEEB77, 1);
+            obj.graphics.beginFill(0x650A5A, 1);
+            obj.graphics.drawCircle(250, 250, 50);
+            obj.graphics.endFill();
 
-        var bindEvents = function() {
+            obj.graphics.lineStyle(10, 0xFFBD01, 1);
+            obj.graphics.beginFill(0xC34288, 1);
+            obj.graphics.drawCircle(400, 250, 50);
+            obj.graphics.endFill();
 
-        };
+            obj.graphics.lineStyle(2, 0xFFFFFF, 1);
+            obj.graphics.beginFill(0xAA4F08, 1);
+            obj.graphics.drawEllipse(600, 250, 80, 50);
+            obj.graphics.endFill();
 
-        var pointerMove = function(event) {
-            if (obj.dragging) {
-                obj.brush.position.copyFrom(event.data.global);
-                obj.app.renderer.render(obj.brush, obj.renderTexture, false, null, false);
-            }
-        };
+            obj.graphics.beginFill(0xFF3300);
+            obj.graphics.lineStyle(4, 0xffd900, 1);
+            obj.graphics.moveTo(50, 350);
+            obj.graphics.lineTo(250, 350);
+            obj.graphics.lineTo(100, 400);
+            obj.graphics.lineTo(50, 350);
+            obj.graphics.closePath();
+            obj.graphics.endFill();
 
-        var pointerDown = function(event) {
-            obj.dragging = true;
-            pointerMove(event);
-        };
+            obj.graphics.lineStyle(2, 0xFF00FF, 1);
+            obj.graphics.beginFill(0x650A5A, 0.25);
+            obj.graphics.drawRoundedRect(50, 440, 100, 100, 16);
+            obj.graphics.endFill();
 
-        var pointerUp = function(event) {
-            obj.dragging = false;
+            obj.graphics.lineStyle(2, 0xFFFFFF);
+            obj.graphics.beginFill(0x35CC5A, 1);
+            obj.graphics.drawStar(360, 370, 5, 50);
+            obj.graphics.endFill();
+
+            obj.graphics.lineStyle(2, 0xFFFFFF);
+            obj.graphics.beginFill(0xFFCC5A, 1);
+            obj.graphics.drawStar(280, 510, 7, 50);
+            obj.graphics.endFill();
+
+            obj.graphics.lineStyle(4, 0xFFFFFF);
+            obj.graphics.beginFill(0x55335A, 1);
+            obj.graphics.drawStar(470, 450, 4, 50);
+            obj.graphics.endFill();
+
+            const path = [600, 370, 700, 460, 780, 420, 730, 570, 590, 520];
+
+            obj.graphics.lineStyle(0);
+            obj.graphics.beginFill(0x3500FA, 1);
+            obj.graphics.drawPolygon(path);
+            obj.graphics.endFill();
+
+            obj.app.stage.addChild(obj.graphics);
         };
 
         return {
@@ -237,7 +258,7 @@
         }
     })();
 
-    pixi.component.scratchcard.init();
+    pixi.component.graphicsSimple.init();
 })();
               </code></pre>
             <hr>
@@ -264,38 +285,6 @@
                 <a id="pixi-application" href="/example/basic/container#pixi-application"
                     class="pixi-accordion__title">
                     PIXI.Application
-                    <span class="pixi-accordion__title-window">
-                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 96 96">
-                            <path
-                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
-                            </path>
-                        </svg>
-                    </span>
-                </a>
-            </div>
-            <hr>
-        </div>
-        <div class="pixi-wrap pixi-link-texture">
-            <div class="pixi-accordion">
-                <a id="pixi-texture" href="/example/basic/container#pixi-texture" class="pixi-accordion__title">
-                    PIXI.Texture
-                    <span class="pixi-accordion__title-window">
-                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 96 96">
-                            <path
-                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
-                            </path>
-                        </svg>
-                    </span>
-                </a>
-            </div>
-            <hr>
-        </div>
-        <div class="pixi-wrap pixi-link-spite">
-            <div class="pixi-accordion">
-                <a id="pixi-sprite" href="/example/basic/container#pixi-sprite" class="pixi-accordion__title">
-                    PIXI.Sprite
                     <span class="pixi-accordion__title-window">
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 96 96">

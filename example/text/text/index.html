@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIXI Text</title>
+
+    <link rel="stylesheet" href="/common/css/common.css">
+</head>
+
+<body>
+    <div class="pixi-navigation">
+        <div class="pixi-navigation__button-wrap">
+            <button type="button" class="pixi-navigation__button">
+                <div class="pixi-navigation__bar-wrap">
+                    <div class="pixi-navigation__bar bar1"></div>
+                    <div class="pixi-navigation__bar bar2"></div>
+                    <div class="pixi-navigation__bar bar3"></div>
+                    <div class="pixi-navigation__bar bar4"></div>
+                </div>
+            </button>
+        </div>
+        <div class="pixi-navigation__content">
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Basic</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="container">
+                        <a href="/example/basic/container">Container</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="particle-container">
+                        <a href="/example/basic/particle-container">Particle Container</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="tinting">
+                        <a href="/example/basic/tinting">Tinting</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="simple-plane">
+                        <a href="/example/basic/simple-plane">Simple Plane</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Advanced</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="slots">
+                        <a href="/example/advanced/slots">Slots</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="scratchcard">
+                        <a href="/example/advanced/scratchcard">Scratch Card</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="mouse-trail">
+                        <a href="/example/advanced/mouse-trail">Mouse Trail</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="starwarp">
+                        <a href="/example/advanced/starwarp">Star Warp</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="screenshot">
+                        <a href="/example/advanced/screenshot">Screen Shot</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Sprite</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="sprite-basic">
+                        <a href="/example/sprite/sprite-basic">Basic</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="sprite-texture-swap">
+                        <a href="/example/sprite/sprite-texture-swap">Texture Swap</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="sprite-animated">
+                        <a href="/example/sprite/sprite-animated">Animated Sprite - Explosion</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="sprite-tiling">
+                        <a href="/example/sprite/sprite-tiling">Tiling Sprite</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="sprite-video">
+                        <a href="/example/sprite/sprite-video">Video</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Text</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="text">
+                        <a href="/example/text/text">Text</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Graphics</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="graphics-simple">
+                        <a href="/example/graphics/graphics-simple">Simple</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="graphics-advanced">
+                        <a href="/example/graphics/graphics-advanced">Advanced</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="graphics-dynamic">
+                        <a href="/example/graphics/graphics-dynamic">Dynamic</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Interaction</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="interaction-click">
+                        <a href="/example/interaction/interaction-click">Click</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="interaction-interactivity">
+                        <a href="/example/interaction/interaction-interactivity">Interactivity</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="interaction-dragging">
+                        <a href="/example/interaction/interaction-dragging">Dragging</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="interaction-custom-mouse-icon">
+                        <a href="/example/interaction/interaction-custom-mouse-icon">Custom Mouse Icon</a>
+                    </li>
+                    <li class="pixi-navigation__content-list--item" data-content="interaction-custom-hitarea">
+                        <a href="/example/interaction/interaction-custom-hitarea">Custom Hitarea</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="pixi-navigation__content-wrap">
+                <div class="pixi-navigation__content-title">Documents</div>
+                <ul class="pixi-navigation__content-list">
+                    <li class="pixi-navigation__content-list--item" data-content="total-document">
+                        <a href="/example/document/total-document">Documents</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pixi-navigation__logo">HJ</div>
+    </div>
+    <div class="pixi-navigation__dim"></div>
+    <section class="pixi pixi-text">
+        <div class="pixi-controller">
+            <div class="pixi-controller__title">
+                PIXI Text
+            </div>
+            <hr>
+            <div class="pixi-controller__container">
+                <div class="pixi-controller__canvas">
+                    <canvas id="text" width="800" height="800"></canvas>
+                </div>
+            </div>
+            <div class="pixi-title">Example Code</div>
+            <pre class="pixi-controller__codeblock"><code>
+;(function() {
+    'use strict';
+
+    window.pixi = window.pixi || {};
+    window.pixi.component = window.pixi.component || {};
+
+    pixi.component.text = (function() {
+        var obj = {};
+
+        var init = function() {
+            obj.section = document.querySelector('.pixi-text');
+
+            if (!!obj.section) {
+                setElements();
+                setRichText();
+                setSkewText();
+            }
+        };
+
+        var setElements = function() {
+            obj.app = new PIXI.Application({
+                view: document.getElementById('text'),
+                backgroundColor: 0xFFFFFF
+            });
+
+            obj.basicText = new PIXI.Text('Basic text in pixi');
+            obj.basicText.x = 50;
+            obj.basicText.y = 100;
+
+            obj.app.stage.addChild(obj.basicText);
+        };
+
+        var setRichText = function() {
+            var style = new PIXI.TextStyle({
+                fontFamily: 'Arial',
+                fontSize: 36,
+                fontStyle: 'italic',
+                fontWeight: 'bold',
+                fill: ['#ffffff', '#00ff99'],
+                stroke: '#4a1850',
+                strokeThickness: 5,
+                dropShadow: true,
+                dropShadowColor: '#000000',
+                dropShadowBlur: 4,
+                dropShadowAngle: Math.PI / 6,
+                dropShadowDistance: 6,
+                wordWrap: true,
+                wordWrapWidth: 440,
+                lineJoin: 'round',
+            });
+
+            var richText = new PIXI.Text('Rich text with a lot of options and across multiple lines', style);
+            richText.x = 50;
+            richText.y = 220;
+
+            obj.app.stage.addChild(richText);
+        };
+
+        var setSkewText = function() {
+            var skewStyle = new PIXI.TextStyle({
+                fontFamily: 'Arial',
+                dropShadow: true,
+                dropShadowAlpha: 0.8,
+                dropShadowAngle: 2.1,
+                dropShadowBlur: 4,
+                dropShadowColor: '0x111111',
+                dropShadowDistance: 10,
+                fill: ['#ffffff'],
+                stroke: '#004620',
+                fontSize: 60,
+                fontWeight: 'lighter',
+                lineJoin: 'round',
+                strokeThickness: 12,
+            });
+
+            var skewText = new PIXI.Text('SKEW IS COOL', skewStyle);
+            skewText.skew.set(0.65, -0.3);
+            skewText.anchor.set(0.5, 0.5);
+            skewText.x = 300;
+            skewText.y = 480;
+
+            obj.app.stage.addChild(skewText);
+        };
+
+        return {
+            init: init
+        }
+    })();
+
+    pixi.component.text.init();
+})();
+              </code></pre>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-display-object">
+            <div class="pixi-accordion">
+                <a id="pixi-display-object" href="/example/basic/container#pixi-display-object"
+                    class="pixi-accordion__title has-content">
+                    PIXI.DisplayObject
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-application">
+            <div class="pixi-accordion">
+                <a id="pixi-application" href="/example/basic/container#pixi-application"
+                    class="pixi-accordion__title">
+                    PIXI.Application
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-texture">
+            <div class="pixi-accordion">
+                <a id="pixi-texture" href="/example/basic/container#pixi-texture" class="pixi-accordion__title">
+                    PIXI.Texture
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-text">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-text">🔗</a>
+                <a id="pixi-text" class="pixi-accordion__title has-content">
+                    PIXI.Text
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Text.html">https://pixijs.download/release/docs/PIXI.Text.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">Text 개체는 한 줄 또는 여러 줄의 Text를 만들며, CanvasAPI를 사용하여 생성된다.</div>
+                    <div class="pixi-desc--sentence">BitmapText에 비해 이 클래스의 주요 이점은 런타임에 변경할 수 있는 Text 스타일을 크게 제어할 수 있다는
+                        것이다.</div>
+                    <div class="pixi-desc--sentence">주요 단점은 각 Text 조각에 더 많은 메모리를 사용할 수 있는 고유한 Texture가 있다는 것이다. Text가
+                        변경되면 이 Texture를 다시 생성하고 GPU에 다시 업로드해야 하므로 시간이 걸린다.</div>
+                    <div class="pixi-desc--sentence">줄을 분할하려면 Text 문자열에 '\n'을 사용하거나 스타일 개체에서 wordWrap 속성을 true로 변경하고
+                        wordWrapWidth 속성에 값을 지정할 수 있다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Example</div>
+                    <pre class="pixi-codeblock"><code>
+var text = new PIXI.Text('This is a PixiJS text', {
+    fontFamily : 'Arial',
+    fontSize: 24,
+    fill : 0xff1010,
+    align : 'center'
+});
+                  </code></pre>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.Text (text, style, canvas)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>text</td>
+                            <td>string</td>
+                            <td>Text 개체에 표시할 문자열</td>
+                        </tr>
+                        <tr>
+                            <td>style</td>
+                            <td>object | PIXI.TextStyle</td>
+                            <td>스타일 매개변수</td>
+                        </tr>
+                        <tr>
+                            <td>canvas</td>
+                            <td>HTMLCanvasElement</td>
+                            <td>텍스트를 그리기 위한 캔버스 요소</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">destroy (options) : void</strong>
+                                <p class="pixi-list__text">이 텍스트 객체를 파괴한다.</p>
+                                <p class="pixi-list__text">Sprite와 달리 Text 개체는 대부분의 경우 텍스처가 다른 Sprite와 공유되지 않기 때문에
+                                    baseTexture와 텍스처를 자동으로 파괴한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>options</td>
+                                <td>IDestroyOptions | boolean</td>
+                                <td></td>
+                                <td>옵션 매개변수. true 일 경우 모든 옵션이 해당 값으로 설정된 것처럼 작동</td>
+                            </tr>
+                            <tr>
+                                <td>options.children</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>true일 경우 모든 자식의 destroy 메소드를 호출</td>
+                            </tr>
+                            <tr>
+                                <td>options.texture</td>
+                                <td>boolean</td>
+                                <td>true</td>
+                                <td>Sprite의 Texture도 파괴</td>
+                            </tr>
+                            <tr>
+                                <td>options.baseTexture</td>
+                                <td>boolean</td>
+                                <td>true</td>
+                                <td>Sprite의 기본 Texture도 파괴</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">getLocalBounds (rect) : PIXI.Rectangle</strong>
+                                <p class="pixi-list__text">Text 개체의 로컬 경계를 가져온다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>rect</td>
+                                <td>
+                                    <span class="pixi-link">
+                                        <a
+                                            href="/example/basic/particle-container#pixi-rectangle">PIXI.Rectangle</a>
+                                    </span>
+                                </td>
+                                <td>경계를 가져올 직사각형 개체</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">updateText (respectDirty) : void</strong>
+                                <p class="pixi-list__text">Canvas에 Text를 렌더링하고 Texture를 업데이트한다.</p>
+                                <p class="pixi-list__text">기본적으로 이것은 렌더링 전에 Texture가 올바른지 확인하기 위해 내부적으로 사용되지만, 예외적으로 이
+                                    클래스에서 Texture를 "사전 생성"하고 여러 Sprite에서 공유하기 위해 외부에서 호출할 수 있다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>respectDirty</td>
+                                <td>boolean</td>
+                                <td>Text가 더러워지지 않아 함수가 호출된 경우 Text 갱신을 중지할지 여부를 지정한다.</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-text-style">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-text-style">🔗</a>
+                <a id="pixi-text-style" class="pixi-accordion__title has-content">
+                    PIXI.TextStyle
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.TextStyle.html">https://pixijs.download/release/docs/PIXI.TextStyle.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">TextStyle 개체에는 Text 개체를 장식하기 위한 정보가 포함되어 있다.</div>
+                    <div class="pixi-desc--sentence">인스턴스는 여러 Text 객체 간에 공유될 수 있다. 그런 다음 스타일을 변경하면 스타일을 사용하는 모든 Text 개체가
+                        업데이트된다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong> new PIXI.TextStyle (style)</strong></div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>style</td>
+                            <td>object</td>
+                            <td></td>
+                            <td>스타일 매개변수</td>
+                        </tr>
+                        <tr>
+                            <td>style.align</td>
+                            <td>string</td>
+                            <td>'left'</td>
+                            <td>여러 줄 Text의 정렬('왼쪽', '중앙' 또는 '오른쪽')은 한 줄 Text에 영향을 주지 않는다.</td>
+                        </tr>
+                        <tr>
+                            <td>style.breakWords</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>줄을 단어 내에서 줄 바꿈할 수 있는지 여부를 나타낸다. wordWrap을 true로 설정해야 한다.</td>
+                        </tr>
+                        <tr>
+                            <td>style.dropShadow</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>Text의 그림자 설정</td>
+                        </tr>
+                        <tr>
+                            <td>style.dropShadowAlpha</td>
+                            <td>number</td>
+                            <td>1</td>
+                            <td>그림자에 대한 Alpha 설정</td>
+                        </tr>
+                        <tr>
+                            <td>style.dropShadowAngle</td>
+                            <td>number</td>
+                            <td>Math.PI/6</td>
+                            <td>그림자 각도 설정</td>
+                        </tr>
+                        <tr>
+                            <td>style.dropShadowBlur</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>그림자 흐림 반경 설정</td>
+                        </tr>
+                        <tr>
+                            <td>style.dropShadowColor</td>
+                            <td>string | number</td>
+                            <td>'black'</td>
+                            <td>그림자에 사용할 채우기 스타일</td>
+                        </tr>
+                        <tr>
+                            <td>style.dropShadowDistance</td>
+                            <td>number</td>
+                            <td>5</td>
+                            <td>그림자의 반경 설정</td>
+                        </tr>
+                        <tr>
+                            <td>style.fill</td>
+                            <td>string | Array<string> | number | Array<number> | CanvasGradient | CanvasPattern</td>
+                            <td>'black'</td>
+                            <td>Text에 사용될 Canvas 채우기 스타일</td>
+                        </tr>
+                        <tr>
+                            <td>style.fillGradientType</td>
+                            <td>number</td>
+                            <td>PIXI.TEXT_GRADIENT.LINEAR_VERTICAL</td>
+                            <td>채우기가 Gradient를 만들기 위한 색상 배열인 경우 Gradient의 유형/방향을 변경할 수 있다.</td>
+                        </tr>
+                        <tr>
+                            <td>style.fillGradientStops</td>
+                            <td>Array<number>
+                            </td>
+                            <td></td>
+                            <td>채우기가 Gradient를 생성하기 위한 색상 배열인 경우 이 배열은 색상의 정지점(0과 1 사이의 숫자)을 설정하여 균일한 간격의 기본 동작을 재정의할 수
+                                있다.</td>
+                        </tr>
+                        <tr>
+                            <td>style.fontFamily</td>
+                            <td>string | Array<string>
+                            </td>
+                            <td>'Arial'</td>
+                            <td>글꼴 모음</td>
+                        </tr>
+                        <tr>
+                            <td>style.fontSize</td>
+                            <td>number | string</td>
+                            <td>26</td>
+                            <td>글꼴 크기</td>
+                        </tr>
+                        <tr>
+                            <td>style.fontStyle</td>
+                            <td>string</td>
+                            <td>'normal'</td>
+                            <td>글꼴 스타일</td>
+                        </tr>
+                        <tr>
+                            <td>style.fontVariant</td>
+                            <td>string</td>
+                            <td>'normal'</td>
+                            <td>글꼴 변형</td>
+                        </tr>
+                        <tr>
+                            <td>style.fontWeight</td>
+                            <td>string</td>
+                            <td>'normal'</td>
+                            <td>글꼴 두께</td>
+                        </tr>
+                        <tr>
+                            <td>style.leading</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>줄 사이의 공간</td>
+                        </tr>
+                        <tr>
+                            <td>style.letterSpacing</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>글자 사이의 간격</td>
+                        </tr>
+                        <tr>
+                            <td>style.lineHeight</td>
+                            <td>number</td>
+                            <td></td>
+                            <td>줄 높이</td>
+                        </tr>
+                        <tr>
+                            <td>style.lineJoin</td>
+                            <td>string</td>
+                            <td>'miter'</td>
+                            <td>lineJoin 속성은 생성된 모서리 유형을 설정하며 스파이크 텍스트 문제를 해결할 수 있다.<br>"miter"(날카로운 모서리 생성), "round"(둥근
+                                모서리 생성), "bevel"(각진 모서리 생성)</td>
+                        </tr>
+                        <tr>
+                            <td>style.miterLimit</td>
+                            <td>number</td>
+                            <td>10</td>
+                            <td>렌더링된 텍스트의 뾰족함을 줄이거나 늘릴 수 있다.</td>
+                        </tr>
+                        <tr>
+                            <td>style.padding</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>일부 글꼴이 잘릴경우 추가하는 Padding</td>
+                        </tr>
+                        <tr>
+                            <td>style.stroke</td>
+                            <td>string | number</td>
+                            <td>'black'</td>
+                            <td>Text 획에 사용할 Canvas 채우기 스타일</td>
+                        </tr>
+                        <tr>
+                            <td>style.strokeThickness</td>
+                            <td>number</td>
+                            <td>0</td>
+                            <td>획의 두께</td>
+                        </tr>
+                        <tr>
+                            <td>style.trim</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>투명 테두리 자르기</td>
+                        </tr>
+                        <tr>
+                            <td>style.textBaseline</td>
+                            <td>string</td>
+                            <td>'alphabetic'</td>
+                            <td>렌더링되는 텍스트의 기준선</td>
+                        </tr>
+                        <tr>
+                            <td>style.whiteSpace</td>
+                            <td>string</td>
+                            <td>'pre'</td>
+                            <td>줄 바꿈 및 공백이 축소되거나 보존되는지 여부를 결정한다.</td>
+                        </tr>
+                        <tr>
+                            <td>style.wordWrap</td>
+                            <td>boolean</td>
+                            <td>false</td>
+                            <td>줄 바꿈을 사용해야 하는지 여부</td>
+                        </tr>
+                        <tr>
+                            <td>style.wordWrapWidth</td>
+                            <td>number</td>
+                            <td>100</td>
+                            <td>텍스트가 줄 바꿈되는 너비</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">clone () : PIXI.TextStyle</strong>
+                                <p class="pixi-list__text">이것과 같은 값으로 새로운 TextStyle 객체를 생성한다. 개체의 속성만 복제된다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">reset () : void</strong>
+                                <p class="pixi-list__text">모든 속성을 TextStyle.prototype._default에 지정된 기본값으로 재설정한다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">toFontString () : string</strong>
+                                <p class="pixi-list__text">TextMetrics.measureFont()에 사용할 글꼴 스타일 문자열을 생성한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>string</td>
+                                <td>TextMetrics.measureFont()에 전달하기 위한 글꼴 스타일 문자열</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </section>
+    <script src="/common/js/pixi.js"></script>
+    <script src="/common/js/pixi-spine.js"></script>
+    <script src="/common/js/common.js"></script>
+</body>
+
+</html>

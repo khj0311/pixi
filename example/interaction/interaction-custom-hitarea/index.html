@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PIXI Scratch Card</title>
+    <title>PIXI Interaction - Custom Hitarea</title>
 
     <link rel="stylesheet" href="/common/css/common.css">
 </head>
@@ -134,15 +134,15 @@
         <div class="pixi-navigation__logo">HJ</div>
     </div>
     <div class="pixi-navigation__dim"></div>
-    <section class="pixi pixi-scratchcard">
+    <section class="pixi pixi-interaction-custom-hitarea">
         <div class="pixi-controller">
             <div class="pixi-controller__title">
-                PIXI Scratch Card
+                PIXI Interaction - Custom Hitarea
             </div>
             <hr>
             <div class="pixi-controller__container">
                 <div class="pixi-controller__canvas">
-                    <canvas id="scratchcard" width="800" height="800"></canvas>
+                    <canvas id="interactionCustomHitarea" width="800" height="800"></canvas>
                 </div>
             </div>
             <div class="pixi-title">Example Code</div>
@@ -153,83 +153,183 @@
     window.pixi = window.pixi || {};
     window.pixi.component = window.pixi.component || {};
 
-    pixi.component.scratchcard = (function() {
+    pixi.component.interactionCustomHitarea = (function() {
         var obj = {};
 
         var init = function() {
-            obj.section = document.querySelector('.pixi-scratchcard');
+            obj.section = document.querySelector('.pixi-interaction-custom-hitarea');
 
             if (!!obj.section) {
                 setElements();
-                setBrush();
-                setLoader();
-                bindEvents();
+                setStarButton1();
+                setStarButton2();
+                setStarButton3();
+                setStarButton4();
+                setText();
+                setStage();
             }
         };
 
         var setElements = function() {
             obj.app = new PIXI.Application({
-                view: document.getElementById('scratchcard')
+                view: document.getElementById('interactionCustomHitarea')
             });
 
-            obj.dragging = false;
-            obj.renderTexture = null;
-            obj.renderTextureSprite = null;
+            obj.yellowStar = PIXI.Texture.from('/content/images/yellowstar.png');
+            obj.starButton1 = new PIXI.Sprite(obj.yellowStar);
+            obj.starButton2 = new PIXI.Sprite(obj.yellowStar);
+            obj.starButton3 = new PIXI.Sprite(obj.yellowStar);
+            obj.starButton4 = new PIXI.Sprite(obj.yellowStar);
         };
 
-        var setBrush = function() {
-            obj.brush = new PIXI.Graphics();
-            obj.brush.beginFill(0xffffff);
-            obj.brush.drawCircle(0, 0, 50);
-            obj.brush.endFill();
+        var setStarButton1 = function() {
+            obj.starButton1.position.set(50, 200);
+
+            obj.starButton1.buttonMode = true;
+            obj.starButton1.interactive = true;
+
+            obj.starButton1.on('pointerdown', function() {
+                onClick(obj.starButton1);
+            });
+            obj.starButton1.on('pointerover', function() {
+                onPointerOver(obj.starButton1);
+            });
+            obj.starButton1.on('pointerout', function() {
+                onPointerOut(obj.starButton1);
+            });
         };
 
-        var setLoader = function() {
-            obj.app.loader.add('bg1', '/content/images/bg_crayon1.jpg');
-            obj.app.loader.add('bg2', '/content/images/bg_crayon2.jpg');
-            obj.app.loader.load(setScratchCard);
+        var setStarButton2 = function() {
+            obj.starButton2.position.set(250, 200);
+            obj.starButton2.hitArea = new PIXI.Polygon([
+                80, 0,
+                100, 50,
+                160, 55,
+                115, 95,
+                130, 150,
+                80, 120,
+                30, 150,
+                45, 95,
+                0, 55,
+                60, 50,
+            ]);
+            obj.starButton2.buttonMode = true;
+            obj.starButton2.interactive = true;
+
+            obj.starButton2.on('pointerdown', function() {
+                onClick(obj.starButton2);
+            });
+            obj.starButton2.on('pointerover', function() {
+                onPointerOver(obj.starButton2);
+            });
+            obj.starButton2.on('pointerout', function() {
+                onPointerOut(obj.starButton2);
+            });
         };
 
-        var setScratchCard = function(loader, resources) {
-            var background = new PIXI.Sprite(resources.bg1.texture);
-            obj.app.stage.addChild(background);
-            background.width = obj.app.screen.width;
-            background.height = obj.app.screen.height;
+        var setStarButton3 = function() {
+            obj.starButton3.position.set(450, 200);
 
-            var imageToReveal = new PIXI.Sprite(resources.bg2.texture);
-            obj.app.stage.addChild(imageToReveal);
-            imageToReveal.width = obj.app.screen.width;
-            imageToReveal.height = obj.app.screen.height;
+            obj.starButton3.buttonMode = true;
+            obj.starButton3.interactive = true;
 
-            obj.renderTexture = PIXI.RenderTexture.create(obj.app.screen.width, obj.app.screen.height);
-            obj.renderTextureSprite = new PIXI.Sprite(obj.renderTexture);
-            obj.app.stage.addChild(obj.renderTextureSprite);
-            imageToReveal.mask = obj.renderTextureSprite;
+            obj.squareMask = new PIXI.Graphics()
+                .beginFill(0xFFFFFF)
+                .drawRect(obj.starButton3.x, obj.starButton3.y, 75, 200)
+                .endFill();
 
-            obj.app.stage.interactive = true;
-            obj.app.stage.on('pointerdown', pointerDown);
-            obj.app.stage.on('pointerup', pointerUp);
-            obj.app.stage.on('pointermove', pointerMove);
+            obj.starButton3.mask = obj.squareMask;
+            obj.starButton3.on('pointerdown', function() {
+                onClick(obj.starButton3);
+            });
+            obj.starButton3.on('pointerover', function() {
+                onPointerOver(obj.starButton3);
+            });
+            obj.starButton3.on('pointerout', function() {
+                onPointerOut(obj.starButton3);
+            });
         };
 
-        var bindEvents = function() {
+        var setStarButton4 = function() {
+            obj.starButton4.position.set(600, 200);
+            obj.squareMask2 = new PIXI.Graphics()
+                .beginFill(0xFFFFFF)
+                .drawRect(obj.starButton4.x, obj.starButton4.y, 75, 200)
+                .endFill();
 
+            obj.starButton4.mask = obj.squareMask2;
+            obj.starButton4.hitArea = new PIXI.Polygon([
+                80, 0,
+                100, 50,
+                160, 55,
+                115, 95,
+                130, 150,
+                80, 120,
+                30, 150,
+                45, 95,
+                0, 55,
+                60, 50,
+            ]);
+
+            obj.starButton4.buttonMode = true;
+            obj.starButton4.interactive = true;
+
+            obj.starButton4.on('pointerdown', function() {
+                onClick(obj.starButton4);
+            });
+            obj.starButton4.on('pointerover', function() {
+                onPointerOver(obj.starButton4);
+            });
+            obj.starButton4.on('pointerout', function() {
+                onPointerOut(obj.starButton4);
+            });
         };
 
-        var pointerMove = function(event) {
-            if (obj.dragging) {
-                obj.brush.position.copyFrom(event.data.global);
-                obj.app.renderer.render(obj.brush, obj.renderTexture, false, null, false);
-            }
+        var setText = function() {
+            var style = new PIXI.TextStyle({ fill: '#ffffff' });
+
+            obj.text1 = new PIXI.Text('Standard', style);
+            obj.text1.x = obj.starButton1.x + 25;
+            obj.text1.y = obj.starButton1.y + 170;
+
+            obj.text2 = new PIXI.Text('Hit Area', style);
+            obj.text2.x = obj.starButton2.x + 35;
+            obj.text2.y = obj.starButton2.y + 170;
+
+            obj.text3 = new PIXI.Text('Mask', style);
+            obj.text3.x = obj.starButton3.x + 10;
+            obj.text3.y = obj.starButton3.y + 170;
+
+            obj.text4 = new PIXI.Text('Mask + Hit Area', style);
+            obj.text4.x = obj.starButton4.x - 10;
+            obj.text4.y = obj.starButton4.y + 170;
         };
 
-        var pointerDown = function(event) {
-            obj.dragging = true;
-            pointerMove(event);
+        var setStage = function() {
+            obj.app.stage.addChild(
+                obj.starButton2,
+                obj.starButton1,
+                obj.starButton3,
+                obj.starButton4,
+                obj.squareMask,
+                obj.squareMask2,
+                obj.text1,
+                obj.text2,
+                obj.text3,
+                obj.text4,
+            );
         };
 
-        var pointerUp = function(event) {
-            obj.dragging = false;
+        var onClick = function(object) {
+            object.tint = 0x333333;
+        };
+
+        var onPointerOver = function(object) {
+            object.tint = 0x666666;
+        };
+
+        var onPointerOut = function(object) {
+            object.tint = 0xFFFFFF;
         };
 
         return {
@@ -237,7 +337,7 @@
         }
     })();
 
-    pixi.component.scratchcard.init();
+    pixi.component.interactionCustomHitarea.init();
 })();
               </code></pre>
             <hr>
@@ -321,6 +421,92 @@
                         </svg>
                     </span>
                 </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-text">
+            <div class="pixi-accordion">
+                <a id="pixi-rectangle" href="/example/text/text#pixi-text" class="pixi-accordion__title">
+                    PIXI.Text
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-text-style">
+            <div class="pixi-accordion">
+                <a id="pixi-rectangle" href="/example/text/text#pixi-text-style" class="pixi-accordion__title">
+                    PIXI.TextStyle
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-document-polygon">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-polygon">🔗</a>
+                <a id="pixi-polygon" class="pixi-accordion__title has-content">
+                    PIXI.Polygon
+                    <span class="pixi-accordion__title-icon">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
+                        </svg>
+                    </span>
+                </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.Polygon.html">https://pixijs.download/release/docs/PIXI.Polygon.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">사용자 정의 좌표를 통해 모양을 정의하는 클래스.</div>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">clone () : PIXI.Polygon</strong>
+                                <p class="pixi-list__text">이 다각형의 복제본을 만든다.</p>
+                            </li>
+                            <li>
+                                <strong class="pixi-list__title">contains (x, y) : boolean</strong>
+                                <p class="pixi-list__text">이 함수에 전달된 x 및 y 좌표가 이 다각형 내에 포함되어 있는지 확인한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>x</td>
+                                <td>number</td>
+                                <td>X 좌표</td>
+                            </tr>
+                            <tr>
+                                <td>y</td>
+                                <td>number</td>
+                                <td>Y 좌표</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
             <hr>
         </div>

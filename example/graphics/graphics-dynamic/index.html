@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PIXI Scratch Card</title>
+    <title>PIXI Graphics - Dynamic</title>
 
     <link rel="stylesheet" href="/common/css/common.css">
 </head>
@@ -134,15 +134,15 @@
         <div class="pixi-navigation__logo">HJ</div>
     </div>
     <div class="pixi-navigation__dim"></div>
-    <section class="pixi pixi-scratchcard">
+    <section class="pixi pixi-graphics-dynamic">
         <div class="pixi-controller">
             <div class="pixi-controller__title">
-                PIXI Scratch Card
+                PIXI Graphics - Dynamic
             </div>
             <hr>
             <div class="pixi-controller__container">
                 <div class="pixi-controller__canvas">
-                    <canvas id="scratchcard" width="800" height="800"></canvas>
+                    <canvas id="graphicsDynamic" width="800" height="800"></canvas>
                 </div>
             </div>
             <div class="pixi-title">Example Code</div>
@@ -153,83 +153,110 @@
     window.pixi = window.pixi || {};
     window.pixi.component = window.pixi.component || {};
 
-    pixi.component.scratchcard = (function() {
+    pixi.component.graphicsDynamic = (function() {
         var obj = {};
 
         var init = function() {
-            obj.section = document.querySelector('.pixi-scratchcard');
+            obj.section = document.querySelector('.pixi-graphics-dynamic');
 
             if (!!obj.section) {
                 setElements();
-                setBrush();
-                setLoader();
-                bindEvents();
+                drawGraphics();
+                drawMovingShape();
+                setTicker();
             }
         };
 
         var setElements = function() {
             obj.app = new PIXI.Application({
-                view: document.getElementById('scratchcard')
+                view: document.getElementById('graphicsDynamic'),
+                antialias: true
             });
-
-            obj.dragging = false;
-            obj.renderTexture = null;
-            obj.renderTextureSprite = null;
-        };
-
-        var setBrush = function() {
-            obj.brush = new PIXI.Graphics();
-            obj.brush.beginFill(0xffffff);
-            obj.brush.drawCircle(0, 0, 50);
-            obj.brush.endFill();
-        };
-
-        var setLoader = function() {
-            obj.app.loader.add('bg1', '/content/images/bg_crayon1.jpg');
-            obj.app.loader.add('bg2', '/content/images/bg_crayon2.jpg');
-            obj.app.loader.load(setScratchCard);
-        };
-
-        var setScratchCard = function(loader, resources) {
-            var background = new PIXI.Sprite(resources.bg1.texture);
-            obj.app.stage.addChild(background);
-            background.width = obj.app.screen.width;
-            background.height = obj.app.screen.height;
-
-            var imageToReveal = new PIXI.Sprite(resources.bg2.texture);
-            obj.app.stage.addChild(imageToReveal);
-            imageToReveal.width = obj.app.screen.width;
-            imageToReveal.height = obj.app.screen.height;
-
-            obj.renderTexture = PIXI.RenderTexture.create(obj.app.screen.width, obj.app.screen.height);
-            obj.renderTextureSprite = new PIXI.Sprite(obj.renderTexture);
-            obj.app.stage.addChild(obj.renderTextureSprite);
-            imageToReveal.mask = obj.renderTextureSprite;
-
             obj.app.stage.interactive = true;
-            obj.app.stage.on('pointerdown', pointerDown);
-            obj.app.stage.on('pointerup', pointerUp);
-            obj.app.stage.on('pointermove', pointerMove);
+
+            obj.graphics = new PIXI.Graphics();
+            obj.thing = new PIXI.Graphics();
+            obj.count = 0;
         };
 
-        var bindEvents = function() {
+        var drawGraphics = function() {
+            obj.graphics.beginFill(0xFF3300);
+            obj.graphics.lineStyle(10, 0xffd900, 1);
 
+            obj.graphics.moveTo(50, 50);
+            obj.graphics.lineTo(250, 50);
+            obj.graphics.lineTo(100, 100);
+            obj.graphics.lineTo(250, 220);
+            obj.graphics.lineTo(50, 220);
+            obj.graphics.lineTo(50, 50);
+            obj.graphics.closePath();
+            obj.graphics.endFill();
+
+            obj.graphics.lineStyle(10, 0xFF0000, 0.8);
+            obj.graphics.beginFill(0xFF700B, 1);
+
+            obj.graphics.moveTo(210, 300);
+            obj.graphics.lineTo(450, 320);
+            obj.graphics.lineTo(570, 350);
+            obj.graphics.quadraticCurveTo(600, 0, 480, 100);
+            obj.graphics.lineTo(330, 120);
+            obj.graphics.lineTo(410, 200);
+            obj.graphics.lineTo(210, 300);
+            obj.graphics.closePath();
+            obj.graphics.endFill();
+
+            obj.graphics.lineStyle(2, 0x0000FF, 1);
+            obj.graphics.drawRect(50, 250, 100, 100);
+
+            obj.graphics.lineStyle(0);
+            obj.graphics.beginFill(0xFFFF0B, 0.5);
+            obj.graphics.drawCircle(470, 200, 100);
+            obj.graphics.endFill();
+
+            obj.graphics.lineStyle(20, 0x33FF00);
+            obj.graphics.moveTo(30, 30);
+            obj.graphics.lineTo(600, 300);
+
+
+            obj.app.stage.addChild(obj.graphics);
         };
 
-        var pointerMove = function(event) {
-            if (obj.dragging) {
-                obj.brush.position.copyFrom(event.data.global);
-                obj.app.renderer.render(obj.brush, obj.renderTexture, false, null, false);
-            }
+        var drawMovingShape = function() {
+            obj.app.stage.addChild(obj.thing);
+            obj.thing.x = 800 / 2;
+            obj.thing.y = 600 / 2;
+
+            window.app = obj.app;
+            obj.app.renderer.plugins.interaction.on('pointerdown', onPointerDown);
         };
 
-        var pointerDown = function(event) {
-            obj.dragging = true;
-            pointerMove(event);
+        var onPointerDown = function() {
+            obj.graphics.lineStyle(Math.random() * 30, Math.random() * 0xFFFFFF, 1);
+            obj.graphics.moveTo(Math.random() * 800, Math.random() * 600);
+            obj.graphics.bezierCurveTo(
+                Math.random() * 800, Math.random() * 600,
+                Math.random() * 800, Math.random() * 600,
+                Math.random() * 800, Math.random() * 600,
+            );
         };
 
-        var pointerUp = function(event) {
-            obj.dragging = false;
+        var setTicker = function() {
+            obj.app.ticker.add(function() {
+                obj.count += 0.1;
+
+                obj.thing.clear();
+                obj.thing.lineStyle(10, 0xff0000, 1);
+                obj.thing.beginFill(0xffFF00, 0.5);
+
+                obj.thing.moveTo(-120 + Math.sin(obj.count) * 20, -100 + Math.cos(obj.count) * 20);
+                obj.thing.lineTo(120 + Math.cos(obj.count) * 20, -100 + Math.sin(obj.count) * 20);
+                obj.thing.lineTo(120 + Math.sin(obj.count) * 20, 100 + Math.cos(obj.count) * 20);
+                obj.thing.lineTo(-120 + Math.cos(obj.count) * 20, 100 + Math.sin(obj.count) * 20);
+                obj.thing.lineTo(-120 + Math.sin(obj.count) * 20, -100 + Math.cos(obj.count) * 20);
+                obj.thing.closePath();
+
+                obj.thing.rotation = obj.count * 0.1;
+            });
         };
 
         return {
@@ -237,9 +264,9 @@
         }
     })();
 
-    pixi.component.scratchcard.init();
+    pixi.component.graphicsDynamic.init();
 })();
-              </code></pre>
+            </code></pre>
             <hr>
         </div>
         <div class="pixi-wrap pixi-link-display-object">
@@ -276,42 +303,26 @@
             </div>
             <hr>
         </div>
-        <div class="pixi-wrap pixi-link-texture">
-            <div class="pixi-accordion">
-                <a id="pixi-texture" href="/example/basic/container#pixi-texture" class="pixi-accordion__title">
-                    PIXI.Texture
-                    <span class="pixi-accordion__title-window">
-                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 96 96">
-                            <path
-                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
-                            </path>
-                        </svg>
-                    </span>
-                </a>
-            </div>
-            <hr>
-        </div>
-        <div class="pixi-wrap pixi-link-spite">
-            <div class="pixi-accordion">
-                <a id="pixi-sprite" href="/example/basic/container#pixi-sprite" class="pixi-accordion__title">
-                    PIXI.Sprite
-                    <span class="pixi-accordion__title-window">
-                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 96 96">
-                            <path
-                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
-                            </path>
-                        </svg>
-                    </span>
-                </a>
-            </div>
-            <hr>
-        </div>
         <div class="pixi-wrap pixi-link-graphics">
             <div class="pixi-accordion">
                 <a id="pixi-graphics" href="/example/advanced/slots#pixi-graphics" class="pixi-accordion__title">
                     PIXI.Graphics
+                    <span class="pixi-accordion__title-window">
+                        <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 96 96">
+                            <path
+                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+            <hr>
+        </div>
+        <div class="pixi-wrap pixi-link-ticker">
+            <div class="pixi-accordion">
+                <a id="pixi-ticker" href="/example/basic/container#pixi-ticker" class="pixi-accordion__title">
+                    PIXI.Ticker
                     <span class="pixi-accordion__title-window">
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 96 96">

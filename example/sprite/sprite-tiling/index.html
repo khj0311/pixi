@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PIXI Scratch Card</title>
+    <title>PIXI Sprite - Tiling Sprite</title>
 
     <link rel="stylesheet" href="/common/css/common.css">
 </head>
@@ -134,15 +134,15 @@
         <div class="pixi-navigation__logo">HJ</div>
     </div>
     <div class="pixi-navigation__dim"></div>
-    <section class="pixi pixi-scratchcard">
+    <section class="pixi pixi-sprite-tiling-sprite">
         <div class="pixi-controller">
             <div class="pixi-controller__title">
-                PIXI Scratch Card
+                PIXI Sprite - Tiling Sprite
             </div>
             <hr>
             <div class="pixi-controller__container">
                 <div class="pixi-controller__canvas">
-                    <canvas id="scratchcard" width="800" height="800"></canvas>
+                    <canvas id="spriteTiling" width="800" height="800"></canvas>
                 </div>
             </div>
             <div class="pixi-title">Example Code</div>
@@ -153,83 +153,45 @@
     window.pixi = window.pixi || {};
     window.pixi.component = window.pixi.component || {};
 
-    pixi.component.scratchcard = (function() {
+    pixi.component.spriteTiling = (function() {
         var obj = {};
 
         var init = function() {
-            obj.section = document.querySelector('.pixi-scratchcard');
+            obj.section = document.querySelector('.pixi-sprite-tiling-sprite');
 
             if (!!obj.section) {
                 setElements();
-                setBrush();
-                setLoader();
-                bindEvents();
+                setTicker();
             }
         };
 
         var setElements = function() {
+            obj.count = 0;
             obj.app = new PIXI.Application({
-                view: document.getElementById('scratchcard')
+                view: document.getElementById('spriteTiling'),
+                backgroundColor: 0x1099bb
             });
 
-            obj.dragging = false;
-            obj.renderTexture = null;
-            obj.renderTextureSprite = null;
+            obj.texture = PIXI.Texture.from('/content/images/tile.jpg');
+            obj.tilingSprite = new PIXI.TilingSprite(
+                obj.texture,
+                obj.app.screen.width,
+                obj.app.screen.height
+            );
+
+            obj.app.stage.addChild(obj.tilingSprite);
         };
 
-        var setBrush = function() {
-            obj.brush = new PIXI.Graphics();
-            obj.brush.beginFill(0xffffff);
-            obj.brush.drawCircle(0, 0, 50);
-            obj.brush.endFill();
-        };
+        var setTicker = function() {
+            obj.app.ticker.add(function(delta) {
+                obj.count += 0.005;
 
-        var setLoader = function() {
-            obj.app.loader.add('bg1', '/content/images/bg_crayon1.jpg');
-            obj.app.loader.add('bg2', '/content/images/bg_crayon2.jpg');
-            obj.app.loader.load(setScratchCard);
-        };
+                obj.tilingSprite.tileScale.x = 2 + Math.sin(obj.count);
+                obj.tilingSprite.tileScale.y = 2 + Math.cos(obj.count);
 
-        var setScratchCard = function(loader, resources) {
-            var background = new PIXI.Sprite(resources.bg1.texture);
-            obj.app.stage.addChild(background);
-            background.width = obj.app.screen.width;
-            background.height = obj.app.screen.height;
-
-            var imageToReveal = new PIXI.Sprite(resources.bg2.texture);
-            obj.app.stage.addChild(imageToReveal);
-            imageToReveal.width = obj.app.screen.width;
-            imageToReveal.height = obj.app.screen.height;
-
-            obj.renderTexture = PIXI.RenderTexture.create(obj.app.screen.width, obj.app.screen.height);
-            obj.renderTextureSprite = new PIXI.Sprite(obj.renderTexture);
-            obj.app.stage.addChild(obj.renderTextureSprite);
-            imageToReveal.mask = obj.renderTextureSprite;
-
-            obj.app.stage.interactive = true;
-            obj.app.stage.on('pointerdown', pointerDown);
-            obj.app.stage.on('pointerup', pointerUp);
-            obj.app.stage.on('pointermove', pointerMove);
-        };
-
-        var bindEvents = function() {
-
-        };
-
-        var pointerMove = function(event) {
-            if (obj.dragging) {
-                obj.brush.position.copyFrom(event.data.global);
-                obj.app.renderer.render(obj.brush, obj.renderTexture, false, null, false);
-            }
-        };
-
-        var pointerDown = function(event) {
-            obj.dragging = true;
-            pointerMove(event);
-        };
-
-        var pointerUp = function(event) {
-            obj.dragging = false;
+                obj.tilingSprite.tilePosition.x += 1;
+                obj.tilingSprite.tilePosition.y += 1;
+            });
         };
 
         return {
@@ -237,7 +199,7 @@
         }
     })();
 
-    pixi.component.scratchcard.init();
+    pixi.component.spriteTiling.init();
 })();
               </code></pre>
             <hr>
@@ -292,26 +254,182 @@
             </div>
             <hr>
         </div>
-        <div class="pixi-wrap pixi-link-spite">
-            <div class="pixi-accordion">
-                <a id="pixi-sprite" href="/example/basic/container#pixi-sprite" class="pixi-accordion__title">
-                    PIXI.Sprite
-                    <span class="pixi-accordion__title-window">
+        <div class="pixi-wrap pixi-document-tiling-sprite">
+            <div class="pixi-accordion is-accordion-active">
+                <a class="pixi-linkicon" href="#pixi-tiling-sprite">🔗</a>
+                <a id="pixi-tiling-sprite" class="pixi-accordion__title has-content">
+                    PIXI.TilingSprite
+                    <span class="pixi-accordion__title-icon">
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 96 96">
-                            <path
-                                d="M81.436 14.564v54.285h-8V28.221L18.22 83.436l-5.656-5.656L67.78 22.563l-40.629.001v-8z">
-                            </path>
+                            <path d="M48 73.254L11.651 36.361l5.698-5.614L48 61.855l30.651-31.108 5.698 5.614z"></path>
                         </svg>
                     </span>
                 </a>
+                <div class="pixi-content">
+                    <span class="pixi-link">
+                        <a
+                            href="https://pixijs.download/release/docs/PIXI.TilingSprite.html">https://pixijs.download/release/docs/PIXI.TilingSprite.html</a>
+                    </span>
+                    <div class="pixi-subtitle">Description</div>
+                    <div class="pixi-desc--sentence">TilingSprite는 타일링 이미지를 렌더링하는 빠른 방법이다.</div>
+                    <br>
+                    <div class="pixi-subtitle">Properties</div>
+                    <div class="pixi-desc--sentence"><strong>new PIXI.TilingSprite (texture, width, height)</strong>
+                    </div>
+                    <table class="pixi-table">
+                        <tr>
+                            <th>이름</th>
+                            <th>타입</th>
+                            <th style="width: 150px">기본값</th>
+                            <th>설명</th>
+                        </tr>
+                        <tr>
+                            <td>texture</td>
+                            <td>PIXI.Texture</td>
+                            <td></td>
+                            <td>TilingSprite의 텍스쳐</td>
+                        </tr>
+                        <tr>
+                            <td>width</td>
+                            <td></td>
+                            <td>100</td>
+                            <td>TilingSprite의 너비</td>
+                        </tr>
+                        <tr>
+                            <td>height</td>
+                            <td></td>
+                            <td>100</td>
+                            <td>TilingSprite의 높이</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <div class="pixi-subtitle">Methods</div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">PIXI.TilingSprite.from (source, options) :
+                                    PIXI.TilingSprite</strong>
+                                <p class="pixi-list__text">제공한 소스를 기반으로 새로운 TilingSprite를 생성하는 도우미 함수. 소스는 프레임 ID, 이미지
+                                    URL, 비디오 URL, 캔버스 요소, 비디오 요소, 기본 텍스처일 수 있다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>source</td>
+                                <td>string | PIXI.Texture | HTMLCanvasElement | HTMLVideoElement</td>
+                                <td>텍스처를 생성할 소스</td>
+                            </tr>
+                            <tr>
+                                <td>options</td>
+                                <td>Object</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>options.width</td>
+                                <td>number</td>
+                                <td>TilingSprite에 필요한 너비</td>
+                            </tr>
+                            <tr>
+                                <td>options.height</td>
+                                <td>number</td>
+                                <td>TilingSprite에 필요한 높이</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">containsPoint (point) : boolean</strong>
+                                <p class="pixi-list__text">이 TilingSprite 내부에 점이 있는지 확인한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>point</td>
+                                <td>IPointData</td>
+                                <td>확인해야 할 Point</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">destroy (options) : void</strong>
+                                <p class="pixi-list__text">이 스프라이트와 선택적으로 텍스처와 자식을 파괴한다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th style="width: 150px">기본값</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>options</td>
+                                <td>object | boolean</td>
+                                <td></td>
+                                <td>옵션 매개변수. true 일 경우 모든 옵션이 해당 값으로 설정된 것처럼 작동</td>
+                            </tr>
+                            <tr>
+                                <td>options.children</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>true일 경우 모든 자식의 destroy 메소드를 호출</td>
+                            </tr>
+                            <tr>
+                                <td>options.texture</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>Sprite의 Texture도 파괴</td>
+                            </tr>
+                            <tr>
+                                <td>options.baseTexture</td>
+                                <td>boolean</td>
+                                <td>false</td>
+                                <td>Sprite의 기본 Texture도 파괴</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="pixi-list">
+                        <ul>
+                            <li>
+                                <strong class="pixi-list__title">getLocalBounds (rect) : PIXI.Rectangle</strong>
+                                <p class="pixi-list__text">Sprite 개체의 로컬 경계를 가져온다.</p>
+                            </li>
+                        </ul>
+                        <table class="pixi-table">
+                            <tr>
+                                <th>이름</th>
+                                <th>타입</th>
+                                <th>설명</th>
+                            </tr>
+                            <tr>
+                                <td>rect</td>
+                                <td>PIXI.Rectangle</td>
+                                <td>선택적 출력 사각형</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
             <hr>
         </div>
-        <div class="pixi-wrap pixi-link-graphics">
+        <div class="pixi-wrap pixi-link-ticker">
             <div class="pixi-accordion">
-                <a id="pixi-graphics" href="/example/advanced/slots#pixi-graphics" class="pixi-accordion__title">
-                    PIXI.Graphics
+                <a id="pixi-ticker" href="/example/basic/container#pixi-ticker" class="pixi-accordion__title">
+                    PIXI.Ticker
                     <span class="pixi-accordion__title-window">
                         <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 96 96">
